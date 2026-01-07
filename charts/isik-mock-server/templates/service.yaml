@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: {{ include "hapi-fhir-jpaserver.fullversionname" . }}
+    labels:
+      {{ include "hapi-fhir-jpaserver.labels" . | nindent 4 }}
+    {{- with .Values.service.annotations }}
+    annotations:
+      {{ toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+    type: {{ .Values.service.type }}
+    selector:
+      {{ include "hapi-fhir-jpaserver.selectorLabels" . | nindent 6 }}
+    ports:
+      - port: {{ .Values.service.ports.port }}
+        targetPort: {{ .Values.service.ports.targetPort }}
+        protocol: TCP
+        name: http
+

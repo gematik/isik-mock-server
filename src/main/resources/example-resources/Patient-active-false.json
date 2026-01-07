@@ -1,0 +1,135 @@
+{
+  "resourceType": "Patient",
+  "id": "Patient-active-false-Example",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/v3/Basismodul/StructureDefinition/ISiKPatient"
+    ]
+  },
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+            "code": "MR"
+          }
+        ]
+      },
+      "system": "http://testkrankenhaus.de/fhir/sid/Patient",
+      "value": "IdentifierValuepatient-delete"
+    }
+  ],
+  "name": [
+    {
+      "use": "official",
+      "family": "Graf von und zu Mustermann",
+      "_family": {
+        "extension": [
+          {
+            "url": "http://fhir.de/StructureDefinition/humanname-namenszusatz",
+            "valueString": "Graf"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/humanname-own-name",
+            "valueString": "Mustermann"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix",
+            "valueString": "von und zu"
+          }
+        ]
+      },
+      "given": [
+        "Max"
+      ],
+      "prefix": [
+        "Prof."
+      ],
+      "_prefix": [
+        {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/iso21090-EN-qualifier",
+              "valueCode": "AC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "use": "maiden",
+      "family": "Musterknabe",
+      "_family": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/humanname-own-name",
+            "valueString": "Musterknabe"
+          }
+        ]
+      }
+    }
+  ],
+  "address": [
+    {
+      "type": "both",
+      "line": [
+        "Musterstraße 3",
+        "1. Etage Hinterhaus"
+      ],
+      "_line": [
+        {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetName",
+              "valueString": "Musterstraße"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-houseNumber",
+              "valueString": "3"
+            }
+          ]
+        },
+        {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-additionalLocator",
+              "valueString": "1. Etage Hinterhaus"
+            }
+          ]
+        }
+      ],
+      "city": "Musterdorf",
+      "postalCode": "9876",
+      "country": "CH"
+    },
+    {
+      "type": "postal",
+      "line": [
+        "Postfach 4711"
+      ],
+      "_line": [
+        {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-postBox",
+              "valueString": "Postfach 4711"
+            }
+          ]
+        }
+      ],
+      "city": "Musterdorf",
+      "postalCode": "9876",
+      "country": "CH"
+    }
+  ],
+  "active": false,
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "201-867-5309"
+    }
+  ],
+  "gender": "male",
+  "birthDate": "1968-05-12"
+}

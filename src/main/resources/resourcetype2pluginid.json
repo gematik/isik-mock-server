@@ -1,0 +1,76 @@
+{
+    "Account": [
+        "isik3-basismodul"
+    ],
+    "RelatedPerson": [
+        "isik3-basismodul"
+    ],
+    "Composition": [
+        "isik3-basismodul"
+    ],
+    "CodeSystem": [
+        "isik3-basismodul"
+    ],
+    "Condition": [
+        "isik3-basismodul"
+    ],
+    "Encounter": [
+        "isik3-basismodul"
+    ],
+    "Patient": [
+        "isik3-basismodul"
+    ],
+    "Practitioner": [
+        "isik3-basismodul"
+    ],
+    "Procedure": [
+        "isik3-basismodul"
+    ],
+    "ValueSet": [
+        "isik3-basismodul"
+    ],
+    "Coverage": [
+        "isik3-basismodul"
+    ],
+    "DocumentReference": [
+        "isik3-dokumentenaustausch"
+    ],
+    "Medication": [
+        "isik3-medikation"
+    ],
+    "MedicationStatement": [
+        "isik3-medikation"
+    ],
+    "List": [
+        "isik3-medikation"
+    ],
+    "MedicationAdministration": [
+        "isik3-medikation"
+    ],
+    "MedicationRequest": [
+        "isik3-medikation"
+    ],
+    "Schedule": [
+        "isik3-terminplanung"
+    ],
+    "HealthcareService": [
+        "isik3-terminplanung"
+    ],
+    "Communication": [
+        "isik3-terminplanung"
+    ],
+    "Appointment": [
+        "isik3-terminplanung"
+    ],
+    "Slot": [
+        "isik3-terminplanung"
+    ],
+    "Observation": [
+        "isik3-vitalparameter"
+    ],
+    "Bundle": [
+        "isik3-medikation",
+        "isik3-basismodul",
+        "isik3-dokumentenaustausch"
+    ]
+}

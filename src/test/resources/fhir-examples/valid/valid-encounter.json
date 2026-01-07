@@ -1,0 +1,54 @@
+{
+  "resourceType": "Encounter",
+  "id": "Encounter-Test-Example",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/v3/Terminplanung/StructureDefinition/ISiKTerminKontaktMitGesundheitseinrichtung"
+    ]
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://fhir.de/CodeSystem/Kontaktebene",
+          "code": "abteilungskontakt"
+        }
+      ]
+    }
+  ],
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "code": "VN",
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+          }
+        ]
+      },
+      "system": "https://test.krankenhaus.de/fhir/sid/fallnr",
+      "value": "0123456789"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "code": "IMP",
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+  },
+  "subject": {
+    "reference": "Patient/Mustermann"
+  },
+  "appointment": [
+    {
+      "reference": "Appointment/Booking-Example"
+    }
+  ],
+  "account": [
+    {
+      "identifier" : {
+        "system": "http://foo/acc",
+        "value": "12345"
+      }
+    }
+  ]
+}

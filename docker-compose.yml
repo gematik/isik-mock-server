@@ -1,0 +1,36 @@
+services:
+  hapi-fhir-jpaserver:
+    image: europe-west3-docker.pkg.dev/gematik-all-infra-prod/isik/isik-mock-server
+    container_name: hapi-fhir-jpaserver
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://hapi-fhir-postgres:5432/hapi"
+      SPRING_DATASOURCE_USERNAME: "admin"
+      SPRING_DATASOURCE_PASSWORD: "S3cr3t"
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: "org.postgresql.Driver"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
+    depends_on:
+      hapi-fhir-postgres:
+        condition: service_healthy
+  hapi-fhir-postgres:
+    image: postgres:16-alpine
+    container_name: hapi-fhir-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: "hapi"
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "S3cr3t"
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U admin -d hapi' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      start_period: 5s
+      retries: 5
+    volumes:
+      - hapi-fhir-postgres:/var/lib/postgresql/data
+
+volumes:
+  hapi-fhir-postgres:
+    name: hapi-fhir-postgres
