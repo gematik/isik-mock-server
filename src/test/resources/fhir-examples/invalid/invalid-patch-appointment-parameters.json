@@ -1,0 +1,94 @@
+{
+  "resourceType": "Parameters",
+  "parameter": [
+    {
+      "name": "operation",
+      "part": [
+        {
+          "name": "type",
+          "valueCode": "replace"
+        },
+        {
+          "name": "path",
+          "valueString": "Appointment.status"
+        },
+        {
+          "name": "value",
+          "valueCode": "cancelled"
+        }
+      ]
+    },
+    {
+      "name": "operation",
+      "part": [
+        {
+          "name": "type",
+          "valueCode": "replace"
+        },
+        {
+          "name": "path",
+          "valueString": "Appointment.slot"
+        },
+        {
+          "name": "value",
+          "valueReference": {
+            "reference": "Slot/Free-Block"
+          }
+        }
+      ]
+    },
+    {
+      "name": "operation",
+      "part": [
+        {
+          "name": "type",
+          "valueCode": "replace"
+        },
+        {
+          "name": "path",
+          "valueString": "Appointment.start"
+        },
+        {
+          "name": "value",
+          "valueDateTime": "2027-01-01T15:00:00.000+01:00"
+        }
+      ]
+    },
+    {
+      "name": "operation",
+      "part": [
+        {
+          "name": "type",
+          "valueCode": "replace"
+        },
+        {
+          "name": "path",
+          "valueString": "Appointment.end"
+        },
+        {
+          "name": "value",
+          "valueDateTime": "2027-01-01T16:00:00.000+01:00"
+        }
+      ]
+    },
+    {
+      "name": "operation",
+      "part": [
+        {
+          "name": "type",
+          "valueCode": "replace"
+        },
+        {
+          "name": "path",
+          "valueString": "Appointment.participant.actor.where(resolve() is Patient)"
+        },
+        {
+          "name": "value",
+          "valueReference": {
+            "reference": "Patient/Patient-active-false-Example"
+          }
+        }
+      ]
+    }
+  ]
+}

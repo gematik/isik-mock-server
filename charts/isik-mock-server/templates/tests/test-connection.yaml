@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "hapi-fhir-jpaserver.fullversionname" . }}-test-connection"
+  labels:
+    {{- include "hapi-fhir-jpaserver.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": hook-succeeded # Delete Pod if the test completes successfully
+    "ignore-check.kube-linter.io/no-readiness-probe" : "Not necessary here, it's only a single 'wget' execution"
+    "ignore-check.kube-linter.io/no-liveness-probe" : "Not necessary here, it's only a single 'wget' execution"
+spec:
+  serviceAccountName: {{ include "hapi-fhir-jpaserver.serviceAccountName" . }}
+  containers:
+    - name: "{{ include "hapi-fhir-jpaserver.fullversionname" . }}-test-connection"
+      image: busybox:1.37.0
+      command: ['wget']
+      args: ['-O', '/dev/null', '{{ include "hapi-fhir-jpaserver.fullversionname" . }}:{{ .Values.service.port }}/actuator/health']
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 12 }}
+      resources: 
+        limits:
+          cpu: "50m"
+          memory: "20M"
+        requests:
+          cpu: "50m"
+          memory: "20M"
+  restartPolicy: Never

@@ -1,0 +1,40 @@
+{
+  "resourceType": "Communication",
+  "id": "Message-Example",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/v3/Terminplanung/StructureDefinition/ISiKNachricht"
+    ]
+  },
+  "inResponseTo": [
+    {
+      "reference": "Communication/Message-Example"
+    }
+  ],
+  "status": "completed",
+  "subject": {
+    "reference": "Patient/Mustermann"
+  },
+  "sent": "2023-01-01T13:00:00Z",
+  "recipient": [
+    {
+      "display": "Dr. Martina Musterfrau",
+      "reference": "Practitioner/DrFleming"
+    }
+  ],
+  "payload": [
+    {
+      "contentString": "Dies ist eine Testnachricht!"
+    },
+    {
+      "contentAttachment": {
+        "contentType": "text/plain",
+        "url": "https://test",
+        "creation": "2023-01-01T13:00:00Z"
+      }
+    }
+  ],
+  "sender": {
+    "reference": "Patient/Mustermann"
+  }
+}

@@ -1,0 +1,134 @@
+# Default values for hapi-fhir-jpaserver.
+debug:
+  enable: false
+
+# Number of Pod Replicas desired
+replicaCount: 1
+
+# Required Values for the Chart
+required:
+  # Define the docker image
+  image:
+    # The repository where is stored the docker image "hapi-fhir-jpaserver"
+    repository: europe-west3-docker.pkg.dev/gematik-all-infra-prod/isik
+    # The name of the image
+    name: isik-mock-server
+    # Overrides the image tag whose default is the chart appVersion. 
+    # If not given, the Chart AppVersion will be used
+    tag: null
+
+secrets:
+  database:
+    name: hapi-fhir-database-secret
+    items:
+      # The (external) Secret for Database
+      - key: HAPI_FHIR_DB_PASSWORD
+        path: spring/datasource/password
+      # The (external) Secret for Database
+      - key: HAPI_FHIR_DB_USERNAME
+        path: spring/datasource/username
+
+# Extra Labels to be added
+# E.g.
+# customLabels:
+#   my-label: my-label-value
+customLabels: {}
+
+# Extra labels for deployments
+deploymentLabels: {}
+
+# Environment Variables to be defined
+customEnvVars:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://$(HAPI_FHIR_DB_HOST):$(HAPI_FHIR_DB_PORT)/$(HAPI_FHIR_DB_NAME)
+  SPRING_DATASOURCE_DRIVERCLASSNAME: org.postgresql.Driver
+
+# Define custom Container Entrypoint and Arguments (e.g. JVM Tuning)
+# If not given, the Entrypoint defined in Dockerfile will be used
+application:
+  entrypoint: ["java"]
+  parameters: ["-XX:ActiveProcessorCount=2", "-XX:MaxRAMPercentage=80.0", "-XX:+TieredCompilation", "-XX:+UseSerialGC", "-Xmx1G", "--class-path", "/app.war", "-Dloader.path=app.war!/WEB-INF/classes/,app.war!/WEB-INF/,/app/extra-classes", "org.springframework.boot.loader.PropertiesLauncher"]
+
+# Define Image Pull Secrets if using private registry
+imagePullSecrets: []
+nameOverride: "isik-mock-server"
+fullnameOverride: "isik-mock-server"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# Annotations for Workload
+annotations: {}
+imagePullPolicy: IfNotPresent
+# Annotations for Pods
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/path: "/actuator/prometheus"
+  prometheus.io/port: "8080"
+
+# Pod Security Context - applies to all containers in a Pod
+podSecurityContext:
+  # The GID to tell the Kubelet to modify permissions of a volume owned by a pod
+  fsGroup: 10000
+  # Determines when to apply fsGroup actions - "Always" is the default
+  fsGroupChangePolicy: "OnRootMismatch"
+  # Which GID container process is assigned
+  runAsGroup: 10000
+  # Determine whether container process starts as root (UID 0)
+  runAsNonRoot: true
+  # Which UID container process is assigned
+  runAsUser: 10000
+
+# Container Security Context for a single container - Takes precedence over PodSecurityContext
+securityContext:
+  #defines whether container can be granted privileges beyond the parent process spawing the process
+  allowPrivilegeEscalation: false
+  #Define whether the container has privileged access e.g. CAP_SYS_ADMIN capability and SELinux spc_t type
+  privileged: false
+  #Usually no longer required. Determines whether /proc is masked to the container. Do not mount /proc from a host to a container
+  procMount: Default
+  # The SELinux context to be applied to the container. Must not be explicitly set to Unconfined.
+  seccompProfile:
+    type: "RuntimeDefault"
+  #Which GID container process is assigned
+  runAsGroup: 10000
+  # Determine whether container process starts as root (UID 0)
+  runAsNonRoot: true
+  #Which UID container process is assigned
+  runAsUser: 10000
+  # Sets the file system as read-only
+  readOnlyRootFilesystem: true
+  #Ability to remove and /or add Linux Capabilities
+  capabilities:
+    drop:
+      - all
+
+service:
+  type: ClusterIP
+  annotations: {}
+  ports:
+    port: 8080
+    targetPort: 8080
+
+# Default Resources
+resources:
+  limits:
+    cpu: "2000m"
+    memory: "4Gi"
+  requests:
+    cpu: "300m"
+    memory: "1Gi"
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+nodeSelector: {}
+tolerations: []

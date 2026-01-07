@@ -1,0 +1,40 @@
+{
+  "resourceType": "ValueSet",
+  "id": "ValueSet-Test-Example",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/v3/Basismodul/StructureDefinition/ISiKValueSet"
+    ]
+  },
+  "useContext": [
+    {
+      "code": {
+        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type",
+        "code": "focus"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "Encounter",
+            "system": "http://hl7.org/fhir/resource-types"
+          }
+        ]
+      }
+    }
+  ],
+  "url": "http://foo/valueset",
+  "version": "1.0.0",
+  "name": "TestValueSet",
+  "status": "active",
+  "expansion": {
+    "timestamp": "2022-03-30",
+    "contains": [
+      {
+        "system": "http://hl7.org/fhir/days-of-week",
+        "version": "1.0.0",
+        "code": "sun",
+        "display": "Sunday"
+      }
+    ]
+  }
+}

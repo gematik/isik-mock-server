@@ -1,0 +1,175 @@
+<Bundle xmlns='http://hl7.org/fhir'>
+  <id value='ISiKBundle-Example'/>
+  <meta>
+    <profile value='https://gematik.de/fhir/isik/v3/Basismodul/StructureDefinition/ISiKBerichtBundle'/>
+  </meta>
+  <identifier>
+    <type>
+      <coding>
+        <system value='http://terminology.hl7.org/CodeSystem/v2-0203'/>
+        <code value='FILL'/>
+      </coding>
+    </type>
+    <system value='https://fhir.krankenhaus.example/sid/subsystem-a/berichtbundlenummer'/>
+    <value value='0123456789'/>
+  </identifier>
+  <type value='document'/>
+  <timestamp value='2022-05-03T17:57:34+01:00'/>
+  <entry>
+    <fullUrl value='urn:uuid:74b471ba-6fc9-11ed-a1eb-0242ac120002'/>
+    <resource>
+      <Composition>
+        <id value='composition-blutdruck'/>
+        <meta>
+          <profile value='https://gematik.de/fhir/isik/v3/Basismodul/StructureDefinition/ISiKBerichtSubSysteme'/>
+        </meta>
+        <text>
+          <status value='extensions'/>
+          <div xmlns='http://www.w3.org/1999/xhtml'>
+            <p>Familienname:Fürstin von Musterfrau</p>
+            <p>Geburtsdatum:1964-08-12</p>
+            <p>PID:TestPID</p>
+            <p>Bericht-Status:final</p>
+            <p>Bericht-Typ:Berichtzusammenfassung / Document Summary</p>
+            <p>Datum:03.05.2022</p>
+            <p>Titel:Blutdruckmessung vom 3.5.2022</p>
+            <p>Autor:Gerät XY, Fa. Z, Modell T</p>
+          </div>
+        </text>
+        <identifier>
+          <type>
+            <coding>
+              <system value='http://terminology.hl7.org/CodeSystem/v2-0203'/>
+              <code value='unknown-code'/>
+            </coding>
+          </type>
+          <system value='https://fhir.krankenhaus.example/sid/system-a/berichtnummer'/>
+          <value value='0123456789'/>
+        </identifier>
+        <status value='final'/>
+        <type>
+          <coding>
+            <system value='http://loinc.org'/>
+            <code value='55112-7'/>
+          </coding>
+        </type>
+        <subject>
+          <reference value='urn:uuid:3bada18a-6fd2-11ed-a1eb-0242ac112345'/>
+        </subject>
+        <encounter>
+          <reference value='urn:uuid:74b46c1a-6fc9-11ed-a1eb-0242ac198765'/>
+        </encounter>
+        <date value='2022-05-03'/>
+        <author>
+          <type value='Device'/>
+          <display value='Gerät XY, Fa. Z, Modell T'/>
+        </author>
+        <title value='Blutdruckmessung vom 3.5.2022'/>
+        <section>
+          <title value='Messung'/>
+          <text>
+            <status value='generated'/>
+            <div xmlns='http://www.w3.org/1999/xhtml'>
+              <table>
+                <tr>
+                  <td>
+                    <b>Systolisch</b>
+                  </td>
+                  <td>
+                    <b>Diastolisch</b>
+                  </td>
+                  <td>
+                    <b>Einheit</b>
+                  </td>
+                  <td>
+                    <b>Uhrzeit</b>
+                  </td>
+                </tr>
+                <tr>
+                  <td>140</td>
+                  <td>110</td>
+                  <td>mmHG</td>
+                  <td>17:15h</td>
+                </tr>
+              </table>
+            </div>
+          </text>
+        </section>
+      </Composition>
+    </resource>
+  </entry>
+  <entry>
+    <fullUrl value='urn:uuid:3bada18a-6fd2-11ed-a1eb-0242ac112345'/>
+    <resource>
+      <Patient>
+        <id value='PatientinMusterfrauMinimal'/>
+        <identifier>
+          <type>
+            <coding>
+              <system value='http://terminology.hl7.org/CodeSystem/v2-0203'/>
+              <code value='MR'/>
+            </coding>
+          </type>
+          <system value='https://fhir.krankenhaus.example/sid/PID'/>
+          <value value='TestPID'/>
+        </identifier>
+        <name>
+          <use value='official'/>
+          <family value='Fürstin von Musterfrau'/>
+          <given value='Erika'/>
+          <prefix value='Dr.'/>
+        </name>
+        <gender value='female'/>
+        <birthDate value='1964-08-12'/>
+      </Patient>
+    </resource>
+  </entry>
+  <entry>
+    <fullUrl value='urn:uuid:74b46c1a-6fc9-11ed-a1eb-0242ac198765'/>
+    <resource>
+      <Encounter>
+        <id value='FachabteilungskontaktMinimal'/>
+        <identifier>
+          <type>
+            <coding>
+              <system value='http://terminology.hl7.org/CodeSystem/v2-0203'/>
+              <code value='VN'/>
+            </coding>
+          </type>
+          <system value='https://test.krankenhaus.de/fhir/sid/besuchsnummer'/>
+          <value value='0123456789'/>
+        </identifier>
+        <status value='unknown'/>
+        <class>
+          <system value='http://terminology.hl7.org/CodeSystem/v3-ActCode'/>
+          <code value='IMP'/>
+        </class>
+        <type>
+          <coding>
+            <system value='http://fhir.de/CodeSystem/kontaktart-de'/>
+            <code value='operation'/>
+          </coding>
+        </type>
+        <type>
+          <coding>
+            <system value='http://fhir.de/CodeSystem/Kontaktebene'/>
+            <code value='abteilungskontakt'/>
+          </coding>
+        </type>
+        <serviceType>
+          <coding>
+            <system value='http://fhir.de/CodeSystem/dkgev/Fachabteilungsschluessel'/>
+            <code value='0100'/>
+          </coding>
+        </serviceType>
+        <subject>
+          <reference value='urn:uuid:3bada18a-6fd2-11ed-a1eb-0242ac112345'/>
+        </subject>
+        <period>
+          <start value='2022-05-03'/>
+          <end value='2022-05-05'/>
+        </period>
+      </Encounter>
+    </resource>
+  </entry>
+</Bundle>

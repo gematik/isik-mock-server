@@ -1,0 +1,4 @@
+./src/main/java/ca/uhn/fhir/*
+./src/test/java/ca/uhn/fhir/*
+./src/test/java/some/custom/*
+./src/main/webapp/*

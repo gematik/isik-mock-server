@@ -1,0 +1,24 @@
+{
+  "resourceType": "CodeSystem",
+  "status": "active",
+  "content": "complete",
+  "name": "TestCategoryCodesCS",
+  "id": "test-category-codes",
+  "title": "Test Category Codes",
+  "url": "https://test.gematik.de/fhir/isik/v3/CodeSystem/test-category-codes",
+  "concept": [
+    {
+      "code": "read"
+    },
+    {
+      "code": "search"
+    },
+    {
+      "code": "capability"
+    },
+    {
+      "code": "composition"
+    }
+  ],
+  "count": 4
+}

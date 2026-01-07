@@ -1,0 +1,15 @@
+{
+  "resourceType": "Slot",
+  "id": "Busy-Block",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/v3/Terminplanung/StructureDefinition/ISiKTerminblock"
+    ]
+  },
+  "schedule": {
+    "reference": "Schedule/Entry-Example"
+  },
+  "status": "busy",
+  "start": "2027-01-01T14:00:00Z",
+  "end": "2027-01-01T15:00:00Z"
+}

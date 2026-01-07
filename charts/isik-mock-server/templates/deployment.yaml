@@ -1,0 +1,159 @@
+{{/* Check required values and define variables */}}
+{{ $dockerRepository := .Values.required.image.repository | required ".Values.required.image.repository is required." -}}
+{{ $dockerImage := .Values.required.image.name | required ".Values.required.image.name is required." -}}
+{{ $dockerTag := .Values.required.image.tag | default .Chart.AppVersion -}}
+{{ $customEnvVars := .Values.customEnvVars -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "hapi-fhir-jpaserver.fullversionname" . }}
+  labels:
+    {{ include "hapi-fhir-jpaserver.labels" . | nindent 4 }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{ include "hapi-fhir-jpaserver.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{ include "hapi-fhir-jpaserver.selectorLabels" . | nindent 8 }}
+        {{ include "hapi-fhir-jpaserver.deploymentLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "hapi-fhir-jpaserver.serviceAccountName" . }}
+      securityContext:
+        {{ toYaml .Values.podSecurityContext | nindent 8 }}
+      # Add writable volumes
+      volumes:
+        - name: tmp-volume
+          emptyDir: { }
+        {{- if .Values.secrets.database }}
+        - name: db-secret-volume
+          secret:
+            secretName: {{ .Values.secrets.database.name | required "resourceName is required for secret database." }}
+            items:
+            {{- range $index, $item := .Values.secrets.database.items }}
+              - key: {{ $item.key | required "key is required for secret database items." }}
+                path: {{ $item.path | required "path is required for secret." }}
+            {{- end }}
+        {{- end }}
+        {{- if .Values.debug.enable }}
+        - name: jfr-volume
+          emptyDir: { }
+        {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{ toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ $dockerRepository }}/{{ $dockerImage }}:{{ $dockerTag }}"
+          {{- /* Pull always an image if is tagged as "latest" */}}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          {{- /* If entrypoint and parameters are both defined, configure them */ -}}
+          {{- if .Values.application.entrypoint }}
+          {{- if .Values.application.parameters }}
+          {{- with .Values.application.entrypoint }}
+          command: 
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.application.parameters }}
+          args: 
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          # Set the Environment Variables for the container
+          env:
+            - name: "TZ"
+              value: "Europe/Berlin"
+            - name: "SPRING_CONFIG_IMPORT"
+              value: "optional:configtree:{{ include "hapi-fhir-jpaserver.secretMountPath" . }}/"
+            {{- if .Values.debug.enable }}
+            - name: "JAVA_TOOL_OPTIONS"
+              value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:9000"
+            {{- end }}
+            {{- if $customEnvVars }}
+            # Custom Environment Variables
+            {{- range $_, $key := keys $customEnvVars | sortAlpha }}
+            - name: {{ $key | quote }}
+              value: {{ get $customEnvVars $key | quote }}
+            {{- end }}
+            {{- end }}
+          # Mount Volumes in container
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+            - name: db-secret-volume
+              readOnly: true
+              mountPath: "{{ include "hapi-fhir-jpaserver.secretMountPath" . }}/"
+          {{- if .Values.debug.enable }}
+            - name: jfr-volume
+              mountPath: /jfrdump
+          {{- end }}
+          # Ports to be exposed from the container
+          ports:
+            - name: svc-port
+              containerPort: {{ .Values.service.ports.targetPort }}
+              protocol: TCP
+          # Performs checks to verify that the application is successfully started
+          # The Application is marked as failed after periodSeconds*failureThreshold seconds
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: svc-port
+            failureThreshold: 10
+            periodSeconds: 30
+          # Use SpringBoot Actuator Liveness Check
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: svc-port
+            failureThreshold: 3
+            periodSeconds: 30
+          # Use SpringBoot Actuator Readiness Check
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: svc-port
+            failureThreshold: 5
+            periodSeconds: 10
+          {{- with .Values.resources }}
+          # Define Limits and Requested Resources (CPU/RAM)
+          resources:
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - {{ include "hapi-fhir-jpaserver.name" . }}
+              - key: version
+                operator: In
+                values:
+                - {{ .Chart.AppVersion | quote }}
+            topologyKey: "kubernetes.io/hostname"
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
