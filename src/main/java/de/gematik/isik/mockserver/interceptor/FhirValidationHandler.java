@@ -30,7 +30,6 @@ import de.gematik.isik.mockserver.refv.PluginLoader;
 import de.gematik.isik.mockserver.refv.PluginMappingResolver;
 import de.gematik.refv.Plugin;
 import de.gematik.refv.SupportedValidationModule;
-import de.gematik.refv.ValidationModuleFactory;
 import de.gematik.refv.commons.exceptions.ValidationModuleInitializationException;
 import de.gematik.refv.commons.validation.ValidationModule;
 import de.gematik.refv.commons.validation.ValidationOptions;
@@ -40,9 +39,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.*;
 
+import static de.gematik.isik.mockserver.interceptor.FhirValidationHandlerHelper.ISIK_5_PLUGIN_ID;
+import static de.gematik.isik.mockserver.interceptor.FhirValidationHandlerHelper.ISIK_LEGACY_PROFILE_VERSION;
 import static de.gematik.isik.mockserver.interceptor.FhirValidationUtils.getValidationResult;
 
 @Component
@@ -68,13 +73,13 @@ public class FhirValidationHandler {
 	private ValidationResult validateResourceWithProfile(IBaseResource resource, String body)
 			throws ValidationModuleInitializationException {
 		Optional<String> isikProfile = FhirValidationHandlerHelper.findIsikProfile(resource);
-		String profileToUse =
-				isikProfile.orElse(resource.getMeta().getProfile().get(0).getValue());
+		final String profileToUse =
+				isikProfile.orElse(resource.getMeta().getProfile().getFirst().getValue());
 
-		String pluginId = pluginMappingResolver.getPluginIdFromProfile(profileToUse);
-		Plugin plugin = pluginLoader.getPlugin(pluginId);
-		var validationModule = new ValidationModuleFactory().createValidationModuleFromPlugin(plugin);
+		final String pluginId = pluginMappingResolver.getPluginIdFromProfile(profileToUse);
+		final Plugin plugin = pluginLoader.getPlugin(pluginId);
 
+		var validationModule = fhirValidationBundleHandler.getOrCreateModule(plugin);
 		return validationModule.validateString(body);
 	}
 
@@ -90,10 +95,10 @@ public class FhirValidationHandler {
 
 		if (pluginIds.isEmpty() || !pluginLoader.isEnabled()) {
 			return validateResourceWithCoreModule(resourceType, body);
-		} else {
-			plugins = new ArrayList<>(
-					pluginIds.stream().map(pluginLoader::getPlugin).toList());
 		}
+
+		plugins =
+				new ArrayList<>(pluginIds.stream().map(pluginLoader::getPlugin).toList());
 
 		if (resourceType.equals("Bundle")) {
 			return fhirValidationBundleHandler.validateBundleResourceWithPlugins(body, plugins, profileUrls);
@@ -116,7 +121,7 @@ public class FhirValidationHandler {
 		String profileUrl = "http://hl7.org/fhir/StructureDefinition/" + resourceType;
 		ValidationOptions validationOptions = ValidationOptions.getDefaults();
 		validationOptions.setProfiles(Collections.singletonList(profileUrl));
-		var coreModule = new ValidationModuleFactory().createValidationModule(SupportedValidationModule.CORE);
+		var coreModule = FhirValidationHandlerHelper.createFromModule(SupportedValidationModule.CORE);
 
 		return coreModule.validateString(body, validationOptions);
 	}
@@ -124,26 +129,60 @@ public class FhirValidationHandler {
 	private ValidationResult validateResourceWithPlugins(
 			String body, List<Plugin> plugins, List<ValidationOptions> validationOptionsList)
 			throws ValidationModuleInitializationException {
-		List<ValidationModule> validationModules = new ArrayList<>();
-		var allValidationMessages = new LinkedList<SingleValidationMessage>();
 
-		for (Plugin plugin : plugins) {
-			validationModules.add(new ValidationModuleFactory().createValidationModuleFromPlugin(plugin));
+		final var allValidationMessages = new LinkedList<SingleValidationMessage>();
+
+		// Validate with ISiK5 first
+		final var isik5Plugin = FhirValidationHandlerHelper.findPlugin(plugins, ISIK_5_PLUGIN_ID);
+		final var isik5ValidationOptions =
+				FhirValidationHandlerHelper.filterOutByProfile(validationOptionsList, ISIK_LEGACY_PROFILE_VERSION);
+
+		if (isik5Plugin.isPresent() && !isik5ValidationOptions.isEmpty()) {
+			log.info("Validating resource using ISiK5 plugin first...");
+			final var isik5ValidationModule = fhirValidationBundleHandler.getOrCreateModule(isik5Plugin.get());
+			final var validationResult = FhirValidationHandlerHelper.performValidation(
+					body, isik5ValidationModule, isik5ValidationOptions.getFirst());
+			if (validationResult.isValid()) {
+				return validationResult;
+			}
+
+			log.warn("ISiK5 validation found issues, proceeding with legacy modules...");
+			allValidationMessages.addAll(validationResult.getValidationMessages());
 		}
 
-		List<CompletableFuture<ValidationResult>> futures = validationModules.stream()
-				.flatMap(validationModule -> validationOptionsList.stream()
-						.map(validationOptions -> CompletableFuture.supplyAsync(() -> {
-							var validationResult = validationModule.validateString(body, validationOptions);
-							synchronized (allValidationMessages) { // Ensure thread-safe access to
-								// shared list
-								if (!validationResult.isValid()) {
-									allValidationMessages.addAll(validationResult.getValidationMessages());
-								}
-							}
-							return validationResult;
-						})))
-				.toList();
+		// Remove ISiK5 plugin from the list to avoid duplicate validation#
+		List<Plugin> fallbackPlugins;
+		if (isik5Plugin.isPresent()) {
+			fallbackPlugins = FhirValidationHandlerHelper.filterOutById(
+					plugins, isik5Plugin.get().getId());
+		} else {
+			fallbackPlugins = plugins;
+		}
+
+		List<ValidationModule> fallbackModules = new ArrayList<>();
+		for (Plugin plugin : fallbackPlugins) {
+			fallbackModules.add(fhirValidationBundleHandler.getOrCreateModule(plugin));
+		}
+
+		// Only ISiK 3 Profiles must be considered
+		List<ValidationOptions> fallbackValidationOptions =
+				FhirValidationHandlerHelper.findByProfile(validationOptionsList, ISIK_LEGACY_PROFILE_VERSION);
+
+		// Validate with remaining modules using v3 profiles only
+		List<CompletableFuture<ValidationResult>> futures = new ArrayList<>();
+		for (ValidationModule module : fallbackModules) {
+			for (ValidationOptions options : fallbackValidationOptions) {
+				futures.add(CompletableFuture.supplyAsync(() -> {
+					var result = module.validateString(body, options);
+					synchronized (allValidationMessages) {
+						if (!result.isValid()) {
+							allValidationMessages.addAll(result.getValidationMessages());
+						}
+					}
+					return result;
+				}));
+			}
+		}
 
 		return getValidationResult(allValidationMessages, futures);
 	}

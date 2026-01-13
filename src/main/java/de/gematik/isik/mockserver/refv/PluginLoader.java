@@ -148,9 +148,6 @@ public class PluginLoader {
 			bomStream.transferTo(out);
 		}
 		return new ZipFile(tempFile);
-
-		//		var tempFile = Files.createTempFile("plugin", "");
-		//		return new ZipFile()
 	}
 
 	@SneakyThrows

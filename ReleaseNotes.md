@@ -2,6 +2,19 @@
 
 # Release Notes ISiK Mock Server
 
+## Release 3.3.0 (2026-01)
+
+### added
+
+* New Plugin `isik5` version 1.0.0 for the support of ISiK 5 specification.
+
+### changed
+
+* Mapping of Profiles and Plugins have been extended for ISiK 5 support.
+* Bumped Version of ReferenzValidator Plugin to 2.13.0
+* For Resources without an explicit Profile, ISiK 5 Profiles are evaluated first, while ISiK 3 Profiles are used as fallback
+* Updated references in the README to use the DockerHub Image `gematik/isik-mock-server`
+
 ## Release 3.2.0 (2026-01)
 
 ### added
