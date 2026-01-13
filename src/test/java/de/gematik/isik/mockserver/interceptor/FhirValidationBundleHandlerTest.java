@@ -43,6 +43,7 @@ class FhirValidationBundleHandlerTest {
 	private FhirValidationBundleHandler fhirValidationBundleHandler;
 
 	List<String> profileUrls = List.of(
+			"https://gematik.de/fhir/isik/StructureDefinition/ISiKSubscriptionNotification",
 			"https://gematik.de/fhir/isik/v3/Medikation/StructureDefinition/ISiKMedikationTransaction",
 			"https://gematik.de/fhir/isik/v3/Medikation/StructureDefinition/ISiKMedikationTransactionResponse",
 			"https://gematik.de/fhir/isik/v3/Dokumentenaustausch/StructureDefinition/ISiKDokumentenSuchergebnisse",
@@ -57,13 +58,15 @@ class FhirValidationBundleHandlerTest {
 		PluginLoader pluginLoader = new PluginLoader("plugins", true);
 		pluginLoader.init();
 
-		Plugin basismodul = pluginLoader.getPlugin("isik3-basismodul");
-		Plugin medikation = pluginLoader.getPlugin("isik3-medikation");
-		Plugin dokumentenaustausch = pluginLoader.getPlugin("isik3-dokumentenaustausch");
+		Plugin isik5 = pluginLoader.getPlugin("isik5");
+		Plugin isik3basismodul = pluginLoader.getPlugin("isik3-basismodul");
+		Plugin isik3medikation = pluginLoader.getPlugin("isik3-medikation");
+		Plugin isik3dokumentenaustausch = pluginLoader.getPlugin("isik3-dokumentenaustausch");
 
-		plugins.add(basismodul);
-		plugins.add(medikation);
-		plugins.add(dokumentenaustausch);
+		plugins.add(isik5);
+		plugins.add(isik3basismodul);
+		plugins.add(isik3medikation);
+		plugins.add(isik3dokumentenaustausch);
 	}
 
 	@SneakyThrows

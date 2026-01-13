@@ -48,8 +48,9 @@ class PluginLoaderTest {
 	@Test
 	void testInitShouldLoadPlugins() {
 		assertThat(pluginLoader.getPlugins())
-			.hasSize(5)
+			.hasSize(6)
 			.containsKeys(
+				"isik5",
 				"isik3-basismodul",
 				"isik3-medikation",
 				"isik3-terminplanung",

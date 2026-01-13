@@ -1,6 +1,6 @@
 services:
   hapi-fhir-jpaserver:
-    image: europe-west3-docker.pkg.dev/gematik-all-infra-prod/isik/isik-mock-server
+    image: gematik1/isik-mock-server:latest
     container_name: hapi-fhir-jpaserver
     restart: on-failure
     ports:

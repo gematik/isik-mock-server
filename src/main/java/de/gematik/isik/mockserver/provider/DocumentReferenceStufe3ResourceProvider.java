@@ -78,7 +78,7 @@ public class DocumentReferenceStufe3ResourceProvider
 			helper.validatePatient(theResource, outcome, theRequestDetails);
 			helper.validateEncounter(theResource, outcome, theRequestDetails);
 
-			Attachment attachment = theResource.getContent().get(0).getAttachment();
+			Attachment attachment = theResource.getContent().getFirst().getAttachment();
 			byte[] base64data = attachment.getData();
 			helper.validateBase64Data(base64data, outcome);
 			attachment.setUrl(helper.createBinaryResourceAndGetUrl(base64data, theRequestDetails));

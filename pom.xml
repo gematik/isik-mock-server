@@ -19,7 +19,7 @@
     </parent>
 
     <artifactId>isik-mock-server</artifactId>
-    <version>3.2.0-b20</version>
+    <version>3.3.0-b27</version>
     <packaging>war</packaging>
 
     <properties>
@@ -30,7 +30,7 @@
         <clinical-reasoning.version>4.0.0</clinical-reasoning.version>
         <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
         <micrometer.version>1.16.1</micrometer.version>
-        <refv.version>2.12.1</refv.version>
+        <refv.version>2.13.0</refv.version>
         <jacoco.version>0.8.14</jacoco.version>
         <spotless-maven-plugin.version>3.1.0</spotless-maven-plugin.version>
         <license-maven-plugin.version>2.7.1</license-maven-plugin.version>

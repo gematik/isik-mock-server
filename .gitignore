@@ -177,3 +177,6 @@ Temporary Items
 .owaspignore
 .trivyignore.yaml
 README-internal.md
+Vulnerability-Scan-ALL.html
+Misconfiguration-Scan-All.html
+sbom_docker_image_*.json
