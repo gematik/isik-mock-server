@@ -55,6 +55,7 @@ import ca.uhn.fhir.jpa.starter.annotations.OnImplementationGuidesPresent;
 import ca.uhn.fhir.jpa.starter.common.validation.IRepositoryValidationInterceptorFactory;
 import ca.uhn.fhir.jpa.starter.ig.ExtendedPackageInstallationSpec;
 import ca.uhn.fhir.jpa.starter.ig.IImplementationGuideOperationProvider;
+import ca.uhn.fhir.jpa.starter.interceptors.CapabilityStatementInterceptor;
 import ca.uhn.fhir.jpa.subscription.util.SubscriptionDebugLogInterceptor;
 import ca.uhn.fhir.jpa.util.ResourceCountCache;
 import ca.uhn.fhir.mdm.provider.MdmProviderLoader;
@@ -317,6 +318,11 @@ public class StarterJpaConfig {
     }
 
     @Bean
+    public CapabilityStatementInterceptor capabilityStatementInterceptor() {
+        return new CapabilityStatementInterceptor();
+    }
+
+    @Bean
     public RestfulServer restfulServer(
             IFhirSystemDao<?, ?> fhirSystemDao,
             AppProperties appProperties,
@@ -348,7 +354,8 @@ public class StarterJpaConfig {
             ApplicationContext appContext,
             Optional<IpsOperationProvider> theIpsOperationProvider,
             Optional<IImplementationGuideOperationProvider> implementationGuideOperationProvider,
-            DiffProvider diffProvider) {
+            DiffProvider diffProvider,
+            CapabilityStatementInterceptor capabilityStatementInterceptor) {
         RestfulServer fhirServer = new RestfulServer(fhirSystemDao.getContext());
 
         List<String> supportedResourceTypes = appProperties.getSupported_resource_types();
@@ -532,6 +539,9 @@ public class StarterJpaConfig {
 
         // register custom providers
         registerCustomProviders(fhirServer, appContext, appProperties.getCustomProviderClasses());
+
+        // register CapabilityStatementInterceptor
+        fhirServer.registerInterceptor(capabilityStatementInterceptor);
 
         jobDefinitionRegistry.addJobDefinitionIfNotRegistered(reindexJobDefinitionV2);
 

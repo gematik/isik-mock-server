@@ -3,5 +3,5 @@ kubeVersion: ">= 1.28.0"
 name: isik-mock-server
 description: ISIK Mock Server Helm Chart based on HAPI FHIR JPA Server Starter
 type: application
-version: 3.1.0
-appVersion: "3.1.0"
+version: 3.4.0
+appVersion: "3.4.0"

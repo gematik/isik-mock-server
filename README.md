@@ -93,7 +93,8 @@ client should still be able to process in a READ interaction using appropriate e
 
 Every FHIR resource that is being sent to the server via a `POST` or `PUT` request is being validated with
 the [gematik Referenzvalidator](https://github.com/gematik/app-referencevalidator) using
-the [ISIK-3 Plugins](https://github.com/gematik/app-referencevalidator-plugins?tab=readme-ov-file#isik3). If a resource
+the [ISIK-3 Plugins](https://github.com/gematik/app-referencevalidator-plugins?tab=readme-ov-file#isik3) or
+the ISIK-5 one. If a resource
 is not valid it gets rejected and a response with an OperationOutcome containing the validation errors is being sent
 back to the client. Only resources that are valid will be accepted.
 

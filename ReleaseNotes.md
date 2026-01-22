@@ -2,6 +2,12 @@
 
 # Release Notes ISiK Mock Server
 
+## Release 3.4.0 (2026-01)
+
+### added
+
+* Custom CapabilityStatement Interceptor to provide the search parameter `_count` for all the known FHIR Resources
+
 ## Release 3.3.0 (2026-01)
 
 ### added
