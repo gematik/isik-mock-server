@@ -60,6 +60,9 @@ public class FhirValidationBundleHandler {
 			String body, List<Plugin> plugins, List<String> profileUrls)
 			throws ValidationModuleInitializationException {
 
+		// Handle ISiK5 validation separately, especially for use-cases where Profiles are only known to
+		// Isik5 (e.g. Location)
+		final var isik5ValidationMessages = new LinkedList<SingleValidationMessage>();
 		final var allValidationMessages = new LinkedList<SingleValidationMessage>();
 
 		// Validate using ISiK5 first
@@ -75,8 +78,8 @@ public class FhirValidationBundleHandler {
 				return validationResult;
 			}
 
-			allValidationMessages.addAll(validationResult.getValidationMessages());
 			log.warn("ISiK5 validation found issues, proceeding with legacy modules...");
+			isik5ValidationMessages.addAll(validationResult.getValidationMessages());
 		}
 
 		// Validate using ISiK3 plugins, remove ISIK5 plugin from the list to avoid duplicate validation
@@ -100,6 +103,12 @@ public class FhirValidationBundleHandler {
 					return validationResult;
 				}))
 				.toList();
+
+		// Keep until Isik5 and Isik3 validators are part of this server (dual-mode)
+		// Report Isik5 errors only if also Isik3 validation found errors
+		if (!allValidationMessages.isEmpty()) {
+			allValidationMessages.addAll(isik5ValidationMessages);
+		}
 
 		return getValidationResult(allValidationMessages, futures);
 	}

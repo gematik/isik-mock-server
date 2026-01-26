@@ -120,5 +120,13 @@
     "https://gematik.de/fhir/isik/v3/VitalparameterUndKoerpermasze/StructureDefinition/ISiKGCS",
     "https://gematik.de/fhir/isik/v3/VitalparameterUndKoerpermasze/StructureDefinition/ISiKKoerpergewicht",
     "https://gematik.de/fhir/isik/v3/VitalparameterUndKoerpermasze/StructureDefinition/ISiKSauerstoffsaettigung"
+  ],
+  "Organization": [
+    "https://gematik.de/fhir/isik/StructureDefinition/ISiKOrganisation"
+  ],
+  "Location": [
+    "https://gematik.de/fhir/isik/StructureDefinition/ISiKStandort",
+    "https://gematik.de/fhir/isik/StructureDefinition/ISiKStandortRaum",
+    "https://gematik.de/fhir/isik/StructureDefinition/ISiKStandortBettenstellplatz"
   ]
 }

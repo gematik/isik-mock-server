@@ -19,7 +19,7 @@
     </parent>
 
     <artifactId>isik-mock-server</artifactId>
-    <version>3.4.0-b31</version>
+    <version>3.4.1-b37</version>
     <packaging>war</packaging>
 
     <properties>
