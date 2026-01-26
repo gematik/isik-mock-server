@@ -2,6 +2,13 @@
 
 # Release Notes ISiK Mock Server
 
+## Release 3.4.1 (2026-01)
+
+### changed
+
+* Extended support for ISiK 5 Profiles for the validation of `Location` and `Organization` resources
+* Soft-failing validation in case of unknown ISiK 3 Profiles (e.g. `Location` and `Organization`)
+
 ## Release 3.4.0 (2026-01)
 
 ### added

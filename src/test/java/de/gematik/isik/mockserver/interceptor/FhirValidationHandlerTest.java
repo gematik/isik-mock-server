@@ -79,8 +79,8 @@ class FhirValidationHandlerTest {
 	@ValueSource(strings = {
 		"fhir-examples/valid/valid-resource.json",
 		"fhir-examples/valid/valid-resource-no-meta-profile.json",
+		"unknown-isik3-resourcetype.json",
 		"unknown-resourcetype.json"
-
 	})
 	void shouldValidateValidJsonResource(String input) {
 		String body = loadResourceAsString(input);
