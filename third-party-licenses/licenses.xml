@@ -14,7 +14,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-base</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -26,7 +26,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-caching-api</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -38,7 +38,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-caching-caffeine</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -50,7 +50,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-client</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -74,7 +74,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-jpa</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -86,7 +86,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-jpa-hibernate-services</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -98,7 +98,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-jpaserver-base</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -110,7 +110,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-jpaserver-hfql</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -122,7 +122,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-jpaserver-ips</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -134,7 +134,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-jpaserver-mdm</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -146,7 +146,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-jpaserver-model</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -158,7 +158,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-jpaserver-searchparam</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -170,7 +170,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-jpaserver-subscription</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -182,7 +182,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-jpaserver-test-utilities</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -194,7 +194,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-server</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -206,7 +206,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-server-cds-hooks</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -218,7 +218,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-server-mdm</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -230,7 +230,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-server-openapi</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -242,7 +242,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-sql-migrate</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -254,7 +254,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-storage</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -266,7 +266,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-storage-batch2</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -278,7 +278,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-storage-batch2-jobs</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -290,7 +290,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-storage-mdm</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -302,7 +302,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-storage-test-utilities</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -314,7 +314,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-structures-dstu2</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -326,7 +326,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-structures-dstu3</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -338,7 +338,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-structures-hl7org-dstu2</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -350,7 +350,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-structures-r4</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -362,7 +362,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-structures-r4b</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -374,7 +374,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-structures-r5</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -386,7 +386,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-test-utilities</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -398,7 +398,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-testpage-overlay</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -410,7 +410,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-validation</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -422,7 +422,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-validation-resources-dstu2</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -434,7 +434,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-validation-resources-dstu3</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -446,7 +446,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-validation-resources-r4</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -458,7 +458,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-validation-resources-r4b</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -470,7 +470,7 @@
     <dependency>
       <groupId>ca.uhn.hapi.fhir</groupId>
       <artifactId>hapi-fhir-validation-resources-r5</artifactId>
-      <version>8.6.0</version>
+      <version>8.6.1</version>
       <licenses>
         <license>
           <name>Apache Software License 2.0</name>
@@ -626,7 +626,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.5.25</version>
+      <version>1.5.27</version>
       <licenses>
         <license>
           <name>Eclipse Public License - v 1.0</name>
@@ -642,7 +642,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-core</artifactId>
-      <version>1.5.25</version>
+      <version>1.5.27</version>
       <licenses>
         <license>
           <name>Eclipse Public License - v 1.0</name>
@@ -846,7 +846,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jdk8</artifactId>
-      <version>2.18.4</version>
+      <version>2.19.4</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -885,7 +885,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.module</groupId>
       <artifactId>jackson-module-parameter-names</artifactId>
-      <version>2.18.4</version>
+      <version>2.19.4</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1912,7 +1912,7 @@
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-commons</artifactId>
-      <version>1.16.1</version>
+      <version>1.16.2</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1925,7 +1925,7 @@
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-core</artifactId>
-      <version>1.16.1</version>
+      <version>1.16.2</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1938,7 +1938,7 @@
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-jakarta9</artifactId>
-      <version>1.14.12</version>
+      <version>1.15.7</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1964,7 +1964,7 @@
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-registry-prometheus</artifactId>
-      <version>1.16.1</version>
+      <version>1.16.2</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1977,7 +1977,7 @@
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-registry-prometheus-simpleclient</artifactId>
-      <version>1.16.1</version>
+      <version>1.16.2</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1990,7 +1990,7 @@
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-tracing</artifactId>
-      <version>1.6.1</version>
+      <version>1.6.2</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -2003,7 +2003,7 @@
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-tracing-bridge-otel</artifactId>
-      <version>1.6.1</version>
+      <version>1.6.2</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -3312,7 +3312,7 @@
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-core</artifactId>
-      <version>10.1.48</version>
+      <version>10.1.50</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -3325,7 +3325,7 @@
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-el</artifactId>
-      <version>10.1.48</version>
+      <version>10.1.50</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -3338,7 +3338,7 @@
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-websocket</artifactId>
-      <version>10.1.48</version>
+      <version>10.1.50</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -3465,7 +3465,7 @@
     <dependency>
       <groupId>org.cqframework</groupId>
       <artifactId>cqf-fhir</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache License, Version 2.0</name>
@@ -3477,7 +3477,7 @@
     <dependency>
       <groupId>org.cqframework</groupId>
       <artifactId>cqf-fhir-npm</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache License, Version 2.0</name>
@@ -3489,7 +3489,7 @@
     <dependency>
       <groupId>org.cqframework</groupId>
       <artifactId>cql-jvm</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache License, Version 2.0</name>
@@ -3501,7 +3501,7 @@
     <dependency>
       <groupId>org.cqframework</groupId>
       <artifactId>cql-to-elm-jvm</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache License, Version 2.0</name>
@@ -3513,7 +3513,7 @@
     <dependency>
       <groupId>org.cqframework</groupId>
       <artifactId>elm-fhir</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache License, Version 2.0</name>
@@ -3525,7 +3525,7 @@
     <dependency>
       <groupId>org.cqframework</groupId>
       <artifactId>elm-jvm</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache License, Version 2.0</name>
@@ -3537,7 +3537,7 @@
     <dependency>
       <groupId>org.cqframework</groupId>
       <artifactId>engine</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache License, Version 2.0</name>
@@ -3549,7 +3549,7 @@
     <dependency>
       <groupId>org.cqframework</groupId>
       <artifactId>engine-fhir</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache License, Version 2.0</name>
@@ -3561,7 +3561,7 @@
     <dependency>
       <groupId>org.cqframework</groupId>
       <artifactId>quick</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache License, Version 2.0</name>
@@ -3573,7 +3573,7 @@
     <dependency>
       <groupId>org.cqframework</groupId>
       <artifactId>shared-jvm</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache License, Version 2.0</name>
@@ -3585,7 +3585,7 @@
     <dependency>
       <groupId>org.cqframework</groupId>
       <artifactId>ucum</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache License, Version 2.0</name>
@@ -4413,7 +4413,7 @@
     <dependency>
       <groupId>org.opencds.cqf.fhir</groupId>
       <artifactId>cqf-fhir-cql</artifactId>
-      <version>4.0.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -4425,7 +4425,7 @@
     <dependency>
       <groupId>org.opencds.cqf.fhir</groupId>
       <artifactId>cqf-fhir-cr</artifactId>
-      <version>4.0.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -4437,7 +4437,7 @@
     <dependency>
       <groupId>org.opencds.cqf.fhir</groupId>
       <artifactId>cqf-fhir-cr-hapi</artifactId>
-      <version>4.0.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -4449,7 +4449,7 @@
     <dependency>
       <groupId>org.opencds.cqf.fhir</groupId>
       <artifactId>cqf-fhir-utility</artifactId>
-      <version>4.0.0</version>
+      <version>4.2.0</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -4962,7 +4962,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -4974,7 +4974,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-actuator</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -4986,7 +4986,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-actuator-autoconfigure</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -4998,7 +4998,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-autoconfigure</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -5010,7 +5010,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -5022,7 +5022,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -5034,7 +5034,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -5046,7 +5046,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-json</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -5058,7 +5058,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-logging</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -5070,7 +5070,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -5082,7 +5082,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -5094,7 +5094,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -5106,7 +5106,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-test</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -5118,7 +5118,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-test-autoconfigure</artifactId>
-      <version>3.4.11</version>
+      <version>3.5.9</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>

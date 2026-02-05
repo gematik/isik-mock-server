@@ -82,8 +82,6 @@
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKMedikationTransactionResponse",
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKKalender",
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKMedizinischeBehandlungseinheit",
-    "https://gematik.de/fhir/isik/StructureDefinition/ISiKNachricht",
-    "https://gematik.de/fhir/isik/StructureDefinition/ISiKNachrichtExtension",
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKTermin",
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKTerminblock",
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKTerminKontaktMitGesundheitseinrichtung",

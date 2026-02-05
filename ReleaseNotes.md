@@ -2,6 +2,16 @@
 
 # Release Notes ISiK Mock Server
 
+## Release 3.4.2 (2026-02)
+
+### changed
+
+* Upgraded HAPI FHIR to 8.6.1
+
+### fixed
+
+* Removed `Communication` (ISIKNachricht) Profile from the list of supported Resources for ISiK 5
+
 ## Release 3.4.1 (2026-01)
 
 ### changed
