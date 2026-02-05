@@ -18,9 +18,15 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li>
+        <a href="#usage">Usage</a>
+        <ul>
+            <li><a href="#isik-specific-features">ISiK-specific Features</a></li>
+        </ul>
+    </li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
+    <li><a href="#additional-notes-and-disclaimer-from-gematik-gmbh">Additional Notes and Disclaimer from gematik GmbH</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -75,6 +81,24 @@ functionality: [HAPI FHIR Jpa Server Documentation](https://github.com/hapifhir/
 
 ### ISiK-specific Features
 
+#### Loading external Resources
+
+This Mock Server comes with some example FHIR Resources that are loaded on startup. You can add your own resources by
+providing a folder containing FHIR Resources in JSON or XML format.
+
+To do this, you need to set the property `example-fhir-resources.directory` in the `application.yml` file to the path of
+your folder. The server will then load all the FHIR Resources from that folder on startup.
+
+If you use the Docker Image, you can mount a volume in the container to provide the folder with your custom resources.
+For example:
+
+```bash
+docker run --rm -it -p 8080:8080 \
+  -v /path/to/your/resources:/fhir-resources \
+  -e EXAMPLE_FHIR_RESOURCES_DIRECTORY=/fhir-resources \
+   gematik1/isik-mock-server:latest
+```
+
 #### General Design Decisions regarding ISiK
 
 ##### Non-acceptance of instances on CREATE that are not ISiK compliant
@@ -94,7 +118,7 @@ client should still be able to process in a READ interaction using appropriate e
 Every FHIR resource that is being sent to the server via a `POST` or `PUT` request is being validated with
 the [gematik Referenzvalidator](https://github.com/gematik/app-referencevalidator) using
 the [ISIK-3 Plugins](https://github.com/gematik/app-referencevalidator-plugins?tab=readme-ov-file#isik3) or
-the ISIK-5 one. If a resource
+the [ISIK-5](https://github.com/gematik/app-referencevalidator-plugins/releases/tag/isik5-1.0.0) one. If a resource
 is not valid it gets rejected and a response with an OperationOutcome containing the validation errors is being sent
 back to the client. Only resources that are valid will be accepted.
 
@@ -147,7 +171,8 @@ Plausibility checks:
 #### Rescheduling Appointments
 
 The server implements rescheduling of Appointments as described in the `cancelled-appt-id` parameter in the
-official [ISiK v5 Specification](https://simplifier.net/guide/isik-terminplanung-stufe-5/Einfuehrung/Festlegungen/Operations?version=5.1.1) or [ISiK v3 Specification](https://simplifier.net/guide/isik-terminplanung-v3/ImplementationGuide-markdown-Datenobjekte-Operations?version=current).
+official [ISiK v5 Specification](https://simplifier.net/guide/isik-terminplanung-stufe-5/Einfuehrung/Festlegungen/Operations?version=5.1.1)
+or [ISiK v3 Specification](https://simplifier.net/guide/isik-terminplanung-v3/ImplementationGuide-markdown-Datenobjekte-Operations?version=current).
 
 * All plausibility checks from the chapter `Booking Appointments` need to be fulfilled here as well.
 * A reference to the cancelled appointment is stored in the new appointment.
@@ -169,20 +194,24 @@ cross-institutional document exchange via `IHE XDS` or `MHD` or for the transmis
 #### DocumentReferences: Generating Metadata - `DocumentReference/$generate-metadata`
 
 The server supports the Operation of generating of metadata as described in the
-official [ISiK v5 Specification](https://simplifier.net/guide/isik-dokumentenaustausch-stufe-5/Einfuehrung/Festlegungen/ErzeugenVonMetadaten?version=5.1.1) or [ISiK v3 Specification](https://simplifier.net/guide/isik-dokumentenaustausch-v3/ImplementationGuide-markdown-AkteureUndInteraktionen-ErzeugenVonMetadaten?version=current).
+official [ISiK v5 Specification](https://simplifier.net/guide/isik-dokumentenaustausch-stufe-5/Einfuehrung/Festlegungen/ErzeugenVonMetadaten?version=5.1.1)
+or [ISiK v3 Specification](https://simplifier.net/guide/isik-dokumentenaustausch-v3/ImplementationGuide-markdown-AkteureUndInteraktionen-ErzeugenVonMetadaten?version=current).
 
-> Warning
+> **Warning**
 >
-> Although `meta.profile` is not actually mandatory for ISIK-FHIR resources, the specification of the profile
+> Although `meta.profile` is not actually mandatory for ISIK v3 FHIR resources, the specification of the profile
 `“https://gematik.de/fhir/isik/v3/Basismodul/StructureDefinition/ISiKBerichtBundle”` in `meta.profile` is currently
 > mandatory for the correct creation of metadata. It is also mandatory to specify `meta.profile` in such a bundle for
 > the
 > composition: `"https://gematik.de/fhir/isik/v3/Basismodul/StructureDefinition/ISiKBerichtSubSysteme"`.
+>
+> For ISiK v5, the `meta.profile` must be explicitly set, for every FHIR Resource.
 
 #### DocumentReferences: Updating Metadata - `DocumentReference/$update-metadata`
 
 The server supports the Operation of generating of metadata as described in the
-official [ISiK v5 Specification](https://simplifier.net/guide/isik-dokumentenaustausch-stufe-5/Einfuehrung/Festlegungen/Update?version=5.1.1) or [ISIK-3 specification](https://simplifier.net/guide/isik-dokumentenaustausch-v3/ImplementationGuide-markdown-AkteureUndInteraktionen-Update?version=current).
+official [ISiK v5 Specification](https://simplifier.net/guide/isik-dokumentenaustausch-stufe-5/Einfuehrung/Festlegungen/Update?version=5.1.1)
+or [ISIK-3 specification](https://simplifier.net/guide/isik-dokumentenaustausch-v3/ImplementationGuide-markdown-AkteureUndInteraktionen-Update?version=current).
 
 #### DocumentReferences: Resource Validation on Server Start
 

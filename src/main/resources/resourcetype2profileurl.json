@@ -88,7 +88,6 @@
     "https://gematik.de/fhir/isik/v3/Terminplanung/StructureDefinition/ISiKMedizinischeBehandlungseinheit"
   ],
   "Communication": [
-    "https://gematik.de/fhir/isik/StructureDefinition/ISiKNachricht",
     "https://gematik.de/fhir/isik/v3/Terminplanung/StructureDefinition/ISiKNachricht"
   ],
   "Appointment": [
