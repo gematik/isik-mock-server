@@ -15,11 +15,11 @@
     <parent>
         <groupId>ca.uhn.hapi.fhir</groupId>
         <artifactId>hapi-fhir</artifactId>
-        <version>8.6.1</version>
+        <version>8.6.5</version>
     </parent>
 
     <artifactId>isik-mock-server</artifactId>
-    <version>3.4.2-b40</version>
+    <version>3.4.3-b48</version>
     <packaging>war</packaging>
 
     <properties>
@@ -32,9 +32,10 @@
         <!-- Plugins Versions -->
         <maven.failsafe.version>3.5.4</maven.failsafe.version>
         <maven.fire.version>${maven.failsafe.version}</maven.fire.version>
-        <maven.dependency.version>3.9.0</maven.dependency.version>
-        <maven.compiler.version>3.14.1</maven.compiler.version>
-        <spotless-maven-plugin.version>3.1.0</spotless-maven-plugin.version>
+        <maven.dependency.version>3.10.0</maven.dependency.version>
+        <maven.compiler.version>3.15.0</maven.compiler.version>
+        <maven-resources-plugin.version>3.4.0</maven-resources-plugin.version>
+        <spotless-maven-plugin.version>3.2.1</spotless-maven-plugin.version>
         <license-maven-plugin.version>2.7.1</license-maven-plugin.version>
         <ospo-resources.version>1.3.2</ospo-resources.version>
         <!-- Dependencies Versions -->
@@ -43,11 +44,12 @@
         <micrometer.version>1.16.2</micrometer.version>
         <commons.logging.version>1.3.5</commons.logging.version>
         <spring_boot_version>3.5.9</spring_boot_version>
-        <postgresql.version>42.7.9</postgresql.version>
+        <postgresql.version>42.7.10</postgresql.version>
         <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
         <refv.version>2.13.0</refv.version>
         <jacoco.version>0.8.14</jacoco.version>
-        <logback.version>1.5.27</logback.version>
+        <logback.version>1.5.32</logback.version>
+        <testcontainers_version>2.0.3</testcontainers_version>
 
         <!-- Sonar -->
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -57,14 +59,11 @@
             target/surefire-reports,target/failsafe-reports/
         </sonar.junit.reportPaths>
         <sonar.exclusions>
-            ca/uhn/fhir/jpa/starter/**,ca/uhn/fhir/jpa/provider/**,ca/uhn/fhir/jpa/rest/server/**,**/ResourceLoader.java,**/StarterJpaConfig.java
+            ca/uhn/fhir/jpa/starter/**,ca/uhn/fhir/jpa/provider/**,ca/uhn/fhir/jpa/rest/server/**,ca/uhn/fhir/jpa/rest/elastic/**,ca/uhn/fhir/jpa/rest/common/**,ca/uhn/fhir/jpa/rest/validation/**,**/ResourceLoader.java,**/StarterJpaConfig.java
         </sonar.exclusions>
         <sonar.language>java</sonar.language>
-    </properties>
 
-    <prerequisites>
-        <maven>3.8.3</maven>
-    </prerequisites>
+    </properties>
 
     <name>isik-mock-server</name>
     <description>Storage Service for FHIR Resources, powered by HAPI FHIR</description>
@@ -95,6 +94,18 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
                 <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers_version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -332,25 +343,31 @@
                     <groupId>com.sun.xml.bind</groupId>
                     <artifactId>jaxb-impl</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.testcontainers</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
+            <artifactId>testcontainers-postgresql</artifactId>
+            <version>${testcontainers_version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>elasticsearch</artifactId>
+            <artifactId>testcontainers-elasticsearch</artifactId>
+            <version>${testcontainers_version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <artifactId>testcontainers-junit-jupiter</artifactId>
+            <version>${testcontainers_version}</version>
             <scope>test</scope>
         </dependency>
-
 
         <!--
         For some reason JavaDoc crashed during site generation unless we have this dependency
@@ -467,6 +484,23 @@
     </dependencies>
 
     <build>
+        <!-- Enabling resource filtering -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>plugins/*.zip</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>plugins/*.zip</include>
+                </includes>
+            </resource>
+        </resources>
 
         <pluginManagement>
             <plugins>
@@ -490,6 +524,19 @@
         <finalName>${project.artifactId}</finalName>
 
         <plugins>
+            <!-- Resources plugin: sets custom delimiter '@' for placeholder substitutions -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+                <configuration>
+                    <delimiters>
+                        <delimiter>@</delimiter>
+                    </delimiters>
+                    <useDefaultDelimiters>false</useDefaultDelimiters>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>

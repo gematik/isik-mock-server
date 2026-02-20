@@ -2,6 +2,21 @@
 
 # Release Notes ISiK Mock Server
 
+## Release 3.4.3 (2026-02)
+
+### added
+
+- New Plugin `isik5` version 1.0.1 for the support of ISiK 5 specification.
+
+### changed
+
+- Upgraded HAPI FHIR to 8.6.5
+- Updated Docker Base Image
+
+### fixed
+
+- Reintroduced Web UI (see: https://github.com/hapifhir/hapi-fhir-jpaserver-starter/pull/907)
+
 ## Release 3.4.2 (2026-02)
 
 ### changed
@@ -35,7 +50,8 @@
 
 * Mapping of Profiles and Plugins have been extended for ISiK 5 support.
 * Bumped Version of ReferenzValidator Plugin to 2.13.0
-* For Resources without an explicit Profile, ISiK 5 Profiles are evaluated first, while ISiK 3 Profiles are used as fallback
+* For Resources without an explicit Profile, ISiK 5 Profiles are evaluated first, while ISiK 3 Profiles are used as
+  fallback
 * Updated references in the README to use the DockerHub Image `gematik/isik-mock-server`
 
 ## Release 3.2.0 (2026-01)
@@ -59,11 +75,11 @@
 * Upgraded HAPI FHIR to 8.6.0
 * Upgraded docker compose file to use PostgreSQL 16
 * Updated ISiK Plugins:
-  - basisprofil 1.1.1
-  - dokumentenaustausch 2.1.0
-  - medikation 1.1.0
-  - terminplanung 1.2.0
-  - vitalparameter 1.1.0
+    - basisprofil 1.1.1
+    - dokumentenaustausch 2.1.0
+    - medikation 1.1.0
+    - terminplanung 1.2.0
+    - vitalparameter 1.1.0
 
 ## Release 3.0.0 (2025-12)
 
@@ -71,11 +87,11 @@
 
 * Renamed Artifact and Docker Image to "isik-mock-server"
 * Updated ISiK Plugins:
-  - basisprofil 1.1.0
-  - dokumentenaustausch 2.0.1
-  - medikation 1.0.1
-  - terminplanung 1.1.1
-  - vitalparameter 1.0.1
+    - basisprofil 1.1.0
+    - dokumentenaustausch 2.0.1
+    - medikation 1.0.1
+    - terminplanung 1.1.1
+    - vitalparameter 1.0.1
 
 ## Release 2.0.1 (2025-11)
 

@@ -1,4 +1,4 @@
-# Default values for hapi-fhir-jpaserver.
+# Default values for isik-mock-server
 debug:
   enable: false
 
@@ -9,10 +9,10 @@ replicaCount: 1
 required:
   # Define the docker image
   image:
-    # The repository where is stored the docker image "hapi-fhir-jpaserver"
-    repository: europe-west3-docker.pkg.dev/gematik-all-infra-prod/isik
+    # The repository where is stored the docker image "isik-mock-server"
+    repository: ""
     # The name of the image
-    name: isik-mock-server
+    name: gematik1/isik-mock-server
     # Overrides the image tag whose default is the chart appVersion. 
     # If not given, the Chart AppVersion will be used
     tag: null

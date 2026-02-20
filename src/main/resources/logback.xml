@@ -12,7 +12,6 @@
 						"severity": "%level",
 						"trace": "%X{traceId:-}",
 						"span": "%X{spanId:-}",
-						"baggage": "%X{key:-}",
 						"pid": "${PID:-}",
 						"thread": "%thread",
 						"class": "%logger{40}",
