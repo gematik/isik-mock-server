@@ -384,8 +384,8 @@ hapi:
     # comma-separated package names, will be @ComponentScan'ed by Spring to allow for creating custom Spring beans
 
     custom-bean-packages: "de.gematik.isik.mockserver"
-    custom-interceptor-classes: "de.gematik.isik.mockserver.interceptor.DocumentPOSTInterceptor,de.gematik.isik.mockserver.interceptor.FhirValidationInterceptor,de.gematik.isik.mockserver.interceptor.AppointmentPatchInterceptor,de.gematik.isik.mockserver.interceptor.DocumentReferencePreStorageInterceptor,de.gematik.isik.mockserver.interceptor.MediaTypeInterceptor,de.gematik.isik.mockserver.interceptor.TransactionResponseProfileInterceptor"
-    custom-provider-classes: "de.gematik.isik.mockserver.provider.EncounterSearchByIdentifierModifierProvider,de.gematik.isik.mockserver.provider.DocumentReferenceResourceProvider,de.gematik.isik.mockserver.provider.ValueSetSearchByContextTypeValueProvider,de.gematik.isik.mockserver.operation.AppointmentBookOperation,de.gematik.isik.mockserver.operation.DocumentReferenceGenerateMetadataOperation,de.gematik.isik.mockserver.operation.DocumentReferenceUpdateMetadataOperation"
+    custom-interceptor-classes: "de.gematik.isik.mockserver.interceptor.DocumentPOSTInterceptor,de.gematik.isik.mockserver.interceptor.FhirValidationInterceptor,de.gematik.isik.mockserver.interceptor.AppointmentPatchInterceptor,de.gematik.isik.mockserver.interceptor.DocumentReferencePreStorageInterceptor,de.gematik.isik.mockserver.interceptor.MediaTypeInterceptor,de.gematik.isik.mockserver.interceptor.TransactionResponseProfileInterceptor,de.gematik.isik.mockserver.subscription.interceptor.SubscriptionCreateHandshakeInterceptor"
+    custom-provider-classes: "de.gematik.isik.mockserver.provider.EncounterSearchByIdentifierModifierProvider,de.gematik.isik.mockserver.provider.DocumentReferenceResourceProvider,de.gematik.isik.mockserver.provider.ValueSetSearchByContextTypeValueProvider,de.gematik.isik.mockserver.operation.AppointmentBookOperation,de.gematik.isik.mockserver.operation.DocumentReferenceGenerateMetadataOperation,de.gematik.isik.mockserver.operation.DocumentReferenceUpdateMetadataOperation,de.gematik.isik.mockserver.provider.PatientMergeOperationProvider"
     # store_meta_source_information: NONE
     # bundle_batch_pool_size: 10
     # bundle_batch_pool_max_size: 50
@@ -467,6 +467,8 @@ hapi:
         server_address: 'http://localhost:8080/fhir'
         refuse_to_fetch_third_party_urls: false
         fhir_version: R4
+    subscription:
+      resthook_enabled: true
 
 # Custom configuration for plugins
 plugins:

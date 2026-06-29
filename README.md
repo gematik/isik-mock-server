@@ -22,6 +22,7 @@
         <a href="#usage">Usage</a>
         <ul>
             <li><a href="#isik-specific-features">ISiK-specific Features</a></li>
+            <li><a href="#patient-merge---patient-merge-and-subscription-notifications">Patient Merge &amp; Subscription Notifications</a></li>
         </ul>
     </li>
     <li><a href="#contributing">Contributing</a></li>
