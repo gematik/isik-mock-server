@@ -267,6 +267,59 @@ it validates incoming transaction bundles against the `ISiKMedikationTransaction
 transaction-response bundles, the server enriches them with `Bundle.meta.profile` set to
 `ISiKMedikationTransactionResponse` and derives `Bundle.entry.fullUrl` from `entry.response.location`.
 
+#### Patient Merge - `$patient-merge` and Subscription Notifications
+
+The server implements a `$patient-merge` operation and FHIR Subscription Topic notifications based on
+the [Subscriptions R5 Backport IG](https://hl7.org/fhir/uv/subscriptions-backport/). Only **REST-hook subscriptions**
+are supported.
+
+##### Handshake
+
+When a new Subscription is created with `status=requested`, the server immediately sends a **handshake notification**
+to the subscriber's endpoint:
+
+- If the handshake succeeds (2xx HTTP response), the subscription is activated (`status=active`).
+- If it fails (connection error or non-2xx response), the subscription is set to `status=error`.
+
+This ensures that only reachable subscribers become active.
+
+##### Heartbeat
+
+For active subscriptions the server supports **heartbeat notifications** as specified in the backport IG:
+
+- The heartbeat interval is read from the `backport-heartbeat-period` extension on the subscription channel.
+- The server sends an empty notification bundle of type `heartbeat` to the subscriber's endpoint when the interval is
+  due.
+- This allows clients to detect broken connections even when no real events occur.
+
+##### How to test
+
+The following steps simulate the merge-notification workflow. A Postman Collection with ready-made requests is available
+in the `PostmanCollection` folder of this repository.
+
+You need a REST endpoint that accepts `POST /Bundle`. Options:
+
+- **Postman mock server**: Select "Mock servers", create a mock server with method `POST`, and use the displayed URL as
+  the subscription endpoint.
+- **Second HAPI FHIR server**:
+  ```bash
+  docker run -p 8081:8080 \
+    -e hapi.fhir.allowed_bundle_types=COLLECTION,DOCUMENT,MESSAGE,TRANSACTION,TRANSACTIONRESPONSE,BATCH,BATCHRESPONSE,HISTORY,SEARCHSET \
+    hapiproject/hapi:latest
+  ```
+
+Steps:
+
+1. Create the patients to be merged (`Postman: 1. Send Patients`).
+2. Subscribe to the topic `https://gematik.de/fhir/isik/SubscriptionTopic/patient-merge`, setting `.endpoint` to your
+   receiver URL (`Postman: 2. Subscribe to Patient merge topic`).
+3. Trigger the merge via `$patient-merge` with `source-patient` and `target-patient` parameters
+   (`Postman: 3. merge patients`).
+4. Receive the notification Bundle at your endpoint.
+
+> **Note:** When using Postman mock servers, a stack trace may appear in the server log because Postman responds with
+> `Content-Type: text/html` instead of `application/fhir+json`. This does not affect notification delivery.
+
 ## Contributing
 
 If you want to contribute, please check our [CONTRIBUTING.md](./CONTRIBUTING.md).
