@@ -8,6 +8,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.hl7.fhir.r4.model.*;
 import org.springframework.stereotype.Service;
 
+/**
+ * Finalizes a subscription's status after the handshake attempt and cleans up its marker tag.
+ *
+ * <p>Runs in a {@link Transactional.TxType#REQUIRES_NEW new transaction} because it is triggered
+ * asynchronously, after the creating transaction has already committed. It re-reads the latest
+ * subscription and, only while it is still {@code off}/{@code requested}, sets the status to {@code
+ * active} on a successful handshake or {@code error} otherwise, and removes the internal {@code
+ * system|code} marker tag. If the status has meanwhile changed externally, finalization is skipped
+ * and the marker is left in place.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

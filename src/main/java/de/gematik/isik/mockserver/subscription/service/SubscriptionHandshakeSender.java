@@ -19,6 +19,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Sends the subscription handshake notification to a subscriber's {@code rest-hook} endpoint.
+ *
+ * <p>Invoked after a new subscription has been committed (see {@code
+ * SubscriptionCreateHandshakeInterceptor}). The pending subscription is located by its marker tag
+ * ({@link #findByMarkerAndHandshake(String, String)}), a handshake {@code SubscriptionStatus}
+ * bundle is built ({@link #buildHandshakeBundle(Subscription)}) and POSTed to the endpoint with a
+ * 5s connect/ read timeout. The outcome (2xx vs. failure/exception) is then handed to {@link
+ * SubscriptionHandshakeFinalizer} on a separate single-threaded executor to set the final status
+ * and remove the marker. Only {@code off}/{@code requested} subscriptions with a non-blank
+ * rest-hook endpoint are processed.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

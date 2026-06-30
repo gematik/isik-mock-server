@@ -15,6 +15,17 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Overrides HAPI's {@link SubscriptionTopicPayloadBuilder} to label notifications with the correct
+ * {@code SubscriptionStatus.type}.
+ *
+ * <p>HAPI always emits {@code type=event-notification}; this builder rewrites it based on the kind
+ * signalled via {@link HeartBeatDispatchService#currentTypeOrDefault()} (e.g. {@code heartbeat} or
+ * {@code handshake}). For heartbeat and handshake notifications it additionally removes the {@code
+ * notification-event} and {@code events-since-subscription-start} parameters, which only apply to
+ * real event notifications. Registered as {@link Primary @Primary} so it replaces the default
+ * builder bean.
+ */
 @Primary
 @Component
 public class HeartbeatAwarePayloadBuilder extends SubscriptionTopicPayloadBuilder {

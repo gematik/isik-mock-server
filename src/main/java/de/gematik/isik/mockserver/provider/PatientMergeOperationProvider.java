@@ -51,6 +51,36 @@ public class PatientMergeOperationProvider {
 		this.subscriptionTopicDispatcher = subscriptionTopicDispatcher;
 	}
 
+	/**
+	 * Handles the {@code Patient/$merge} operation: merges a source patient into a target patient.
+	 *
+	 * <p>Each patient is resolved either from its direct reference or from its identifiers (exactly
+	 * one of the two per patient). The source is then deactivated and gets a {@code replaced-by} link
+	 * to the target, while the target gets a {@code replaces} link back to the source as a logical
+	 * reference (the source's MR identifier — see the class Javadoc for the rationale). Unless {@code
+	 * preview} is {@code true}, both patients are persisted and a topic notification is dispatched
+	 * for the merge.
+	 *
+	 * @param sourcePatientRef direct reference to the source patient; mutually exclusive with {@code
+	 *     sourcePatientIdentifiers}
+	 * @param sourcePatientIdentifiers identifiers resolving to exactly one source patient; mutually
+	 *     exclusive with {@code sourcePatientRef}
+	 * @param targetPatientRef direct reference to the surviving target patient; mutually exclusive
+	 *     with {@code targetPatientIdentifiers}
+	 * @param targetPatientIdentifiers identifiers resolving to exactly one target patient; mutually
+	 *     exclusive with {@code targetPatientRef}
+	 * @param resultPatient optional expected final state of the target patient; when present it
+	 *     replaces the target's content before the links are applied
+	 * @param preview when {@code true}, validate and compute the merge without persisting changes or
+	 *     sending a notification
+	 * @return a {@code Parameters} resource with an {@code outcome} ({@link OperationOutcome}) and
+	 *     the merged {@code result-patient}
+	 * @throws InvalidRequestException if neither or both of reference and identifiers are given for a
+	 *     patient
+	 * @throws UnprocessableEntityException if a patient's identifiers do not resolve to exactly one
+	 *     patient
+	 * @throws PreconditionFailedException if the source patient has no MR (PID) identifier
+	 */
 	@Operation(name = "$merge", typeName = "Patient")
 	public Parameters patientMerge(
 			@OperationParam(name = "source-patient", min = 0, max = 1) Reference sourcePatientRef,
@@ -121,6 +151,20 @@ public class PatientMergeOperationProvider {
 		return retVal;
 	}
 
+	/**
+	 * Resolves a single patient either from a direct reference or from a set of identifiers,
+	 * enforcing that exactly one of the two is supplied.
+	 *
+	 * @param patientDao the Patient DAO used to read or search
+	 * @param reference direct reference to the patient, or {@code null}
+	 * @param identifiers identifiers to search by (combined with AND), or {@code null}/empty
+	 * @param role {@code "source"} or {@code "target"}, used only for error messages
+	 * @return the resolved patient
+	 * @throws InvalidRequestException if neither or both of {@code reference} and {@code identifiers}
+	 *     are provided
+	 * @throws UnprocessableEntityException if the identifiers match anything other than exactly one
+	 *     patient
+	 */
 	private Patient resolvePatient(
 			IFhirResourceDao patientDao, Reference reference, List<Identifier> identifiers, String role) {
 

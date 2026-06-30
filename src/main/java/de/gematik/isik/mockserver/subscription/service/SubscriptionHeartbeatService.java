@@ -21,6 +21,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.*;
 
+/**
+ * Periodically sends heartbeat notifications for active subscriptions as defined by the <a
+ * href="https://hl7.org/fhir/uv/subscriptions-backport/">Subscriptions R5 Backport IG</a>.
+ *
+ * <p>Every 60 seconds (see {@link #run()}) all {@code status=active} subscriptions are loaded and
+ * filtered to those carrying a valid topic and a positive {@code backport-heartbeat-period}. Due
+ * subscriptions are grouped by topic and a single heartbeat is dispatched per topic via {@link
+ * HeartBeatDispatchService}. The last successful send time per subscription is tracked in {@link
+ * #lastSent} to honour each subscription's individual period; entries for subscriptions that are no
+ * longer active are pruned.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
