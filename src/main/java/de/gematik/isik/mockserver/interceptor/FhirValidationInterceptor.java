@@ -39,14 +39,13 @@ import de.gematik.refv.commons.validation.ValidationResult;
 import de.gematik.refv.commons.validation.ValidationResultToOperationOutcomeConverter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 @Slf4j
 @Interceptor
@@ -62,31 +61,35 @@ public class FhirValidationInterceptor {
 			final HttpServletRequest theRequest, final HttpServletResponse theResponse)
 			throws IOException, ValidationModuleInitializationException {
 
-		String httpMethod = theRequest.getMethod();
+		final String httpMethod = theRequest.getMethod();
 		// process only POST and PUT requests
 		if (!("POST".equalsIgnoreCase(httpMethod) || "PUT".equalsIgnoreCase(httpMethod))) {
 			return true;
 		}
 
-		String pathInfo = theRequest.getPathInfo();
+		final String pathInfo = theRequest.getPathInfo();
 		// Skip validation for FHIR operation calls (e.g., $book, $generate-metadata) or _search.
 		// Operations define their own input format and handle validation internally;
 		// nested resources in Parameters may be intentionally incomplete.
-		if (pathInfo != null && (pathInfo.contains("/$") || pathInfo.contains("/_search"))) {
+		// FIXME: Skip Subscription resources: the backport-subscription profile is unknown to the ISiK-5 plugin.
+		if (pathInfo != null
+			&& (pathInfo.contains("/$") || pathInfo.contains("/_search") || pathInfo.startsWith(
+			"/Subscription"))) {
 			return true;
 		}
 
 		if (StringUtils.isEmpty(pathInfo) || pathInfo.startsWith("/")) {
-			String body = ((ReusableRequestWrapper) theRequest).getBody();
-			EncodingEnum encoding = EncodingEnum.detectEncoding(body);
-			IParser parser = encoding.newParser(ctx);
+			final String body = ((ReusableRequestWrapper) theRequest).getBody();
+			final EncodingEnum encoding = EncodingEnum.detectEncoding(body);
+			final IParser parser = encoding.newParser(ctx);
 
-			IBaseResource resource = parser.parseResource(body);
-			ValidationResult validationResult = validationHandler.validateResource(resource, body);
-			ValidationResult filteredResult = ValidationResultFilter.filter(validationResult);
+			final IBaseResource resource = parser.parseResource(body);
+			final ValidationResult validationResult = validationHandler.validateResource(resource,
+				body);
+			final ValidationResult filteredResult = ValidationResultFilter.filter(validationResult);
 
 			if (!filteredResult.isValid()) {
-				OperationOutcome result =
+				final OperationOutcome result =
 						new ValidationResultToOperationOutcomeConverter(ctx).toOperationOutcome(filteredResult);
 				ResponseUtils.sendValidationErrorResponse(
 						theResponse,
