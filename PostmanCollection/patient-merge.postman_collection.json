@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "bc5a606b-32dd-4bc5-a3b1-7126efbdc775",
+		"name": "patient-merge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3067441"
+	},
+	"item": [
+		{
+			"name": "1. Send Patients",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Prefer",
+						"value": "application/fhir+json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/fhir+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"resourceType\": \"Bundle\",\n  \"type\": \"transaction\",\n  \"entry\": [\n    {\n      \"fullUrl\": \"http://example.com/Patient/DorisQuelle\",\n      \"resource\": {\n        \"resourceType\": \"Patient\",\n        \"id\": \"DorisQuelle\",\n        \"meta\": {\n          \"profile\": [\n            \"https://gematik.de/fhir/isik/StructureDefinition/ISiKPatient\"\n          ]\n        },\n        \"identifier\": [\n          {\n            \"type\": {\n              \"coding\": [\n                {\n                  \"code\": \"MR\",\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\"\n                }\n              ]\n            },\n            \"system\": \"https://fhir.krankenhaus.example/sid/PID\",\n            \"value\": \"654321\"\n          },\n          {\n            \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n            \"value\": \"A123456789\",\n            \"type\": {\n              \"coding\": [\n                {\n                  \"code\": \"KVZ10\",\n                  \"system\": \"http://fhir.de/CodeSystem/identifier-type-de-basis\"\n                }\n              ]\n            }\n          }\n        ],\n        \"name\": [\n          {\n            \"use\": \"official\",\n            \"family\": \"Duplikat\",\n            \"given\": [\n              \"Doris\"\n            ]\n          }\n        ],\n        \"active\": true,\n        \"gender\": \"female\",\n        \"birthDate\": \"1964-08-12\"\n      },\n      \"request\": {\n        \"method\": \"PUT\",\n        \"url\": \"Patient/DorisQuelle\"\n      }\n    },\n    {\n      \"fullUrl\": \"http://example.com/Patient/DorisObsolet\",\n      \"resource\": {\n        \"resourceType\": \"Patient\",\n        \"id\": \"DorisObsolet\",\n        \"meta\": {\n          \"profile\": [\n            \"https://gematik.de/fhir/isik/StructureDefinition/ISiKPatient\"\n          ]\n        },\n        \"identifier\": [\n          {\n            \"type\": {\n              \"coding\": [\n                {\n                  \"code\": \"MR\",\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\"\n                }\n              ]\n            },\n            \"system\": \"https://fhir.krankenhaus.example/sid/PID\",\n            \"value\": \"123456\"\n          },\n          {\n            \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n            \"value\": \"A123456788\",\n            \"type\": {\n              \"coding\": [\n                {\n                  \"code\": \"KVZ10\",\n                  \"system\": \"http://fhir.de/CodeSystem/identifier-type-de-basis\"\n                }\n              ]\n            }\n          }\n        ],\n        \"name\": [\n          {\n            \"use\": \"official\",\n            \"family\": \"Duplikat\",\n            \"given\": [\n              \"Doris\"\n            ]\n          }\n        ],\n        \"active\": true,\n        \"gender\": \"female\",\n        \"birthDate\": \"1964-08-12\"\n      },\n      \"request\": {\n        \"method\": \"PUT\",\n        \"url\": \"Patient/DorisObsolet\"\n      }\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/fhir/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fhir",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2a. Subscribe to Patient merge topic (localhost:8081)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/fhir+json",
+						"type": "text"
+					},
+					{
+						"key": "Prefer",
+						"value": "return=representation",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"resourceType\": \"Subscription\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-subscription\"\n        ]\n    },\n    \"status\": \"requested\",\n    \"reason\": \"Patient merge subscription\",\n    \"criteria\": \"https://gematik.de/fhir/isik/SubscriptionTopic/patient-merge\",\n    \"_criteria\": {\n        \"extension\": [\n            {\n                \"url\": \"http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-filter-criteria\",\n                \"valueString\": \"Patient?\"\n            }\n        ]\n    },\n    \"channel\": {\n        \"extension\": [\n            {\n                \"url\": \"http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-heartbeat-period\",\n                \"valueUnsignedInt\": 86400\n            },\n            {\n                \"url\": \"http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-timeout\",\n                \"valueUnsignedInt\": 60\n            },\n            {\n                \"url\": \"http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-max-count\",\n                \"valuePositiveInt\": 20\n            }\n        ],\n        \"type\": \"rest-hook\",\n        \"endpoint\": \"http://localhost:8081/fhir/Bundle\",\n        \"payload\": \"application/fhir+json\",\n        \"_payload\": {\n            \"extension\": [\n                {\n                    \"url\": \"http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-payload-content\",\n                    \"valueCode\": \"full-resource\"\n                }\n            ]\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/fhir/Subscription/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fhir",
+						"Subscription",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2b. Subscribe to Patient merge topic (postman mock server)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/fhir+json",
+						"type": "text"
+					},
+					{
+						"key": "Prefer",
+						"value": "return=representation",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"resourceType\": \"Subscription\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-subscription\"\n        ]\n    },\n    \"status\": \"requested\",\n    \"reason\": \"Patient merge subscription\",\n    \"criteria\": \"https://gematik.de/fhir/isik/SubscriptionTopic/patient-merge\",\n    \"_criteria\": {\n        \"extension\": [\n            {\n                \"url\": \"http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-filter-criteria\",\n                \"valueString\": \"Patient?\"\n            }\n        ]\n    },\n    \"channel\": {\n        \"extension\": [\n            {\n                \"url\": \"http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-heartbeat-period\",\n                \"valueUnsignedInt\": 86400\n            },\n            {\n                \"url\": \"http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-timeout\",\n                \"valueUnsignedInt\": 60\n            },\n            {\n                \"url\": \"http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-max-count\",\n                \"valuePositiveInt\": 20\n            }\n        ],\n        \"type\": \"rest-hook\",\n        \"endpoint\": \"https://93bc707b-ba7f-4d98-a1d8-74718b2b6b89.mock.pstmn.io\",\n        \"payload\": \"application/fhir+json\",\n        \"_payload\": {\n            \"extension\": [\n                {\n                    \"url\": \"http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-payload-content\",\n                    \"valueCode\": \"full-resource\"\n                }\n            ]\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/fhir/Subscription/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fhir",
+						"Subscription",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. merge patients",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/fhir+json",
+						"type": "text"
+					},
+					{
+						"key": "Prefer",
+						"value": "return=representation",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"resourceType\" : \"Parameters\",\n  \"parameter\" : [\n    {\n    \"name\" : \"source-patient\",\n    \"valueReference\" : {\n        \"reference\" : \"Patient/DorisObsolet\"\n    }\n  },\n      {\n    \"name\" : \"target-patient\",\n    \"valueReference\" : {\n        \"reference\" : \"Patient/DorisQuelle\"\n  }\n      }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/fhir/$patient-merge",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fhir",
+						"$patient-merge"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
