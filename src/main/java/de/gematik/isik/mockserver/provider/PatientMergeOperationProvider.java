@@ -1,5 +1,30 @@
 package de.gematik.isik.mockserver.provider;
 
+/*-
+ * #%L
+ * isik-mock-server
+ * %%
+ * Copyright (C) 2025 - 2026 gematik GmbH
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * *******
+ *
+ * For additional notes and disclaimer from gematik and in case of changes
+ * by gematik, find details in the "Readme" file.
+ * #L%
+ */
+
 import ca.uhn.fhir.jpa.api.dao.DaoRegistry;
 import ca.uhn.fhir.jpa.api.dao.IFhirResourceDao;
 import ca.uhn.fhir.jpa.searchparam.SearchParameterMap;
@@ -8,6 +33,7 @@ import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.SystemRequestDetails;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.PreconditionFailedException;
@@ -82,6 +108,7 @@ public class PatientMergeOperationProvider {
 	 * @throws PreconditionFailedException if the source patient has no MR (PID) identifier
 	 */
 	@Operation(name = "$merge", typeName = "Patient")
+	@SuppressWarnings("unchecked")
 	public Parameters patientMerge(
 			@OperationParam(name = "source-patient", min = 0, max = 1) Reference sourcePatientRef,
 			@OperationParam(name = "source-patient-identifier", min = 0, max = OperationParam.MAX_UNLIMITED)
@@ -92,12 +119,16 @@ public class PatientMergeOperationProvider {
 			@OperationParam(name = "result-patient", min = 0, max = 1) Patient resultPatient,
 			@OperationParam(name = "preview", min = 0, max = 1) BooleanType preview) {
 
-		IFhirResourceDao patientDao = daoRegistry.getResourceDao(ResourceType.Patient.name());
+		var patientDao = daoRegistry.getResourceDao(ResourceType.Patient.name());
+
+		var systemRequestDetail = SystemRequestDetails.forAllPartitions();
 
 		boolean previewOnly = preview != null && preview.booleanValue();
 
-		Patient sourcePatient = resolvePatient(patientDao, sourcePatientRef, sourcePatientIdentifiers, "source");
-		Patient targetPatient = resolvePatient(patientDao, targetPatientRef, targetPatientIdentifiers, "target");
+		Patient sourcePatient =
+				resolvePatient(patientDao, sourcePatientRef, sourcePatientIdentifiers, "source", systemRequestDetail);
+		Patient targetPatient =
+				resolvePatient(patientDao, targetPatientRef, targetPatientIdentifiers, "target", systemRequestDetail);
 
 		Reference targetReference =
 				new Reference("Patient/" + targetPatient.getIdElement().getIdPart());
@@ -133,8 +164,8 @@ public class PatientMergeOperationProvider {
 					.setSeverity(IssueSeverity.INFORMATION)
 					.setDiagnostics("Preview - patient merge not persisted");
 		} else {
-			patientDao.update(sourcePatient);
-			patientDao.update(targetPatient);
+			patientDao.update(sourcePatient, systemRequestDetail);
+			patientDao.update(targetPatient, systemRequestDetail);
 
 			subscriptionTopicDispatcher.dispatch(
 					MERGE_TOPIC_CRITERIA, List.of(targetPatient), RestOperationTypeEnum.UPDATE);
@@ -159,6 +190,7 @@ public class PatientMergeOperationProvider {
 	 * @param reference direct reference to the patient, or {@code null}
 	 * @param identifiers identifiers to search by (combined with AND), or {@code null}/empty
 	 * @param role {@code "source"} or {@code "target"}, used only for error messages
+	 * @param systemRequestDetail the system request detail associated to the request
 	 * @return the resolved patient
 	 * @throws InvalidRequestException if neither or both of {@code reference} and {@code identifiers}
 	 *     are provided
@@ -166,7 +198,11 @@ public class PatientMergeOperationProvider {
 	 *     patient
 	 */
 	private Patient resolvePatient(
-			IFhirResourceDao patientDao, Reference reference, List<Identifier> identifiers, String role) {
+			IFhirResourceDao patientDao,
+			Reference reference,
+			List<Identifier> identifiers,
+			String role,
+			SystemRequestDetails systemRequestDetail) {
 
 		boolean hasReference = reference != null && reference.hasReference();
 		boolean hasIdentifiers = identifiers != null && !identifiers.isEmpty();
@@ -177,7 +213,7 @@ public class PatientMergeOperationProvider {
 		}
 
 		if (hasReference) {
-			return (Patient) patientDao.read(new IdType(reference.getReference()));
+			return (Patient) patientDao.read(new IdType(reference.getReference()), systemRequestDetail);
 		}
 
 		SearchParameterMap searchMap = new SearchParameterMap();
@@ -185,7 +221,7 @@ public class PatientMergeOperationProvider {
 			searchMap.add(Patient.SP_IDENTIFIER, new TokenParam(identifier.getSystem(), identifier.getValue()));
 		}
 
-		IBundleProvider results = patientDao.search(searchMap);
+		IBundleProvider results = patientDao.search(searchMap, systemRequestDetail);
 		List<IBaseResource> matches = results.getResources(0, 2);
 
 		if (matches.size() != 1) {
@@ -193,6 +229,6 @@ public class PatientMergeOperationProvider {
 					"%s-patient-identifier must resolve to exactly one Patient, but matched %d", role, matches.size()));
 		}
 
-		return (Patient) matches.get(0);
+		return (Patient) matches.getFirst();
 	}
 }

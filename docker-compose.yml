@@ -1,22 +1,22 @@
 services:
-  hapi-fhir-jpaserver:
+  isik-mock-server:
     image: gematik1/isik-mock-server:latest
-    container_name: hapi-fhir-jpaserver
+    container_name: isik-mock-server
     restart: on-failure
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://hapi-fhir-postgres:5432/hapi"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://mock-server-db:5432/hapi"
       SPRING_DATASOURCE_USERNAME: "admin"
       SPRING_DATASOURCE_PASSWORD: "S3cr3t"
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: "org.postgresql.Driver"
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
     depends_on:
-      hapi-fhir-postgres:
+      mock-server-db:
         condition: service_healthy
-  hapi-fhir-postgres:
+  mock-server-db:
     image: postgres:18-alpine
-    container_name: hapi-fhir-postgres
+    container_name: mock-server-db
     restart: on-failure
     shm_size: 128mb
     environment:
@@ -30,8 +30,8 @@ services:
       start_period: 5s
       retries: 5
     volumes:
-      - hapi-fhir-postgres:/var/lib/postgresql/data
+      - mock-server-db:/var/lib/postgresql
 
 volumes:
-  hapi-fhir-postgres:
-    name: hapi-fhir-postgres
+  mock-server-db:
+    name: mock-server-db

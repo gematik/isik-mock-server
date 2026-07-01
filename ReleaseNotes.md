@@ -2,6 +2,21 @@
 
 # Release Notes ISiK Mock Server
 
+## Release 5.1.0 (2026-07)
+
+### added
+
+- Support for `Patient/$merge` Operation and Subscription Notifications
+
+### changed
+
+- Upgraded dependencies
+- Renamed Docker Compose service names
+
+### fixed
+
+- Fixed mount point in the `docker-compose.yaml` file, preventing the start of the PostgreSQL Container
+
 ## Release 5.0.9 (2026-06)
 
 ### changed
