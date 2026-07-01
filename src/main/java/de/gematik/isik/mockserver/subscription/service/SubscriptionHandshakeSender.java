@@ -1,8 +1,34 @@
 package de.gematik.isik.mockserver.subscription.service;
 
+/*-
+ * #%L
+ * isik-mock-server
+ * %%
+ * Copyright (C) 2025 - 2026 gematik GmbH
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * *******
+ *
+ * For additional notes and disclaimer from gematik and in case of changes
+ * by gematik, find details in the "Readme" file.
+ * #L%
+ */
+
 import ca.uhn.fhir.jpa.api.dao.DaoRegistry;
 import ca.uhn.fhir.jpa.api.dao.IFhirResourceDao;
 import ca.uhn.fhir.jpa.searchparam.SearchParameterMap;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.api.server.SystemRequestDetails;
 import ca.uhn.fhir.rest.param.TokenParam;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +50,12 @@ import java.util.UUID;
  *
  * <p>Invoked after a new subscription has been committed (see {@code
  * SubscriptionCreateHandshakeInterceptor}). The pending subscription is located by its marker tag
- * ({@link #findByMarkerAndHandshake(String, String)}), a handshake {@code SubscriptionStatus}
- * bundle is built ({@link #buildHandshakeBundle(Subscription)}) and POSTed to the endpoint with a
- * 5s connect/ read timeout. The outcome (2xx vs. failure/exception) is then handed to {@link
- * SubscriptionHandshakeFinalizer} on a separate single-threaded executor to set the final status
- * and remove the marker. Only {@code off}/{@code requested} subscriptions with a non-blank
- * rest-hook endpoint are processed.
+ * ({@link #findByMarkerAndHandshake(String, String, RequestDetails}), a handshake {@code
+ * SubscriptionStatus} bundle is built ({@link #buildHandshakeBundle(Subscription)}) and POSTed to
+ * the endpoint with a 5s connect/ read timeout. The outcome (2xx vs. failure/exception) is then
+ * handed to {@link SubscriptionHandshakeFinalizer} on a separate single-threaded executor to set
+ * the final status and remove the marker. Only {@code off}/{@code requested} subscriptions with a
+ * non-blank rest-hook endpoint are processed.
  */
 @Slf4j
 @Service
@@ -54,7 +80,7 @@ public class SubscriptionHandshakeSender {
 	@Value("${fhir.server.base:http://localhost:8080/fhir}")
 	private String serverBaseUrl;
 
-	public void findByMarkerAndHandshake(String system, String code) {
+	public void findByMarkerAndHandshake(String system, String code, RequestDetails rd) {
 		IFhirResourceDao<Subscription> subDao = daoRegistry.getResourceDao(Subscription.class);
 		SystemRequestDetails srd = new SystemRequestDetails();
 
@@ -65,7 +91,7 @@ public class SubscriptionHandshakeSender {
 			return;
 		}
 
-		Subscription found = (Subscription) matches.get(matches.size() - 1);
+		Subscription found = (Subscription) matches.getLast();
 		String id = found.getIdElement().toUnqualifiedVersionless().getValue();
 		log.info(
 				"HS start: id={} status={} tags={}",
@@ -73,14 +99,14 @@ public class SubscriptionHandshakeSender {
 				found.getStatus(),
 				found.getMeta().getTag().size());
 
-		attemptHandshakeAndFinalize(id, system, code);
+		attemptHandshakeAndFinalize(rd, id, system, code);
 	}
 
-	private void attemptHandshakeAndFinalize(String subscriptionId, String markSys, String markCode) {
+	private void attemptHandshakeAndFinalize(
+			RequestDetails rd, String subscriptionId, String markSys, String markCode) {
 		IFhirResourceDao<Subscription> subDao = daoRegistry.getResourceDao(Subscription.class);
-		SystemRequestDetails srd = new SystemRequestDetails();
 
-		Subscription sub = subDao.read(new IdType(subscriptionId), srd);
+		Subscription sub = subDao.read(new IdType(subscriptionId), rd);
 
 		if (sub.getStatus() != Subscription.SubscriptionStatus.OFF
 				&& sub.getStatus() != Subscription.SubscriptionStatus.REQUESTED) {
@@ -108,7 +134,7 @@ public class SubscriptionHandshakeSender {
 					restTemplate.exchange(endpoint, HttpMethod.POST, new HttpEntity<>(json, headers), String.class);
 
 			ok = resp.getStatusCode().is2xxSuccessful();
-			log.info("HS POST endpoint={} http={}", endpoint, resp.getStatusCodeValue());
+			log.info("HS POST endpoint={} http={}", endpoint, resp.getStatusCode());
 
 		} catch (Exception e) {
 			log.warn(
@@ -120,7 +146,7 @@ public class SubscriptionHandshakeSender {
 		}
 
 		boolean finalOk = ok;
-		exec.execute(() -> finalizer.finalizeStatus(subscriptionId, markSys, markCode, finalOk));
+		exec.execute(() -> finalizer.finalizeStatus(rd, subscriptionId, markSys, markCode, finalOk));
 	}
 
 	private Bundle buildHandshakeBundle(Subscription sub) {

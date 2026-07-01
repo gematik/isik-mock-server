@@ -72,8 +72,8 @@ public class FhirValidationInterceptor {
 		// Skip validation for FHIR operation calls (e.g., $book, $generate-metadata) or _search.
 		// Operations define their own input format and handle validation internally;
 		// nested resources in Parameters may be intentionally incomplete.
-		// FIXME: Skip Subscription resources: the backport-subscription profile is unknown to the
-		// ISiK-5 plugin.
+		// FIXME: Skip Subscription resources: the backport-subscription profile is not properly loaded
+		// from the Reference Validator Library with the ISiK 5 Plugin.
 		if (pathInfo != null
 				&& (pathInfo.contains("/$") || pathInfo.contains("/_search") || pathInfo.startsWith("/Subscription"))) {
 			return true;

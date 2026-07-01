@@ -437,8 +437,8 @@ hapi:
     # -------------------------------------------------------------------------------
     # Q. Subscriptions (disabled by default)
     # -------------------------------------------------------------------------------
-    # subscription:
-    #   resthook_enabled: true
+    subscription:
+      resthook_enabled: true
     #   websocket_enabled: false
     #   polling_interval_ms: 5000
     #   immediately_queued: false
@@ -467,8 +467,6 @@ hapi:
         server_address: 'http://localhost:8080/fhir'
         refuse_to_fetch_third_party_urls: false
         fhir_version: R4
-    subscription:
-      resthook_enabled: true
 
 # Custom configuration for plugins
 plugins:

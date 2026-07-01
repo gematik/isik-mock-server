@@ -22,7 +22,6 @@
         <a href="#usage">Usage</a>
         <ul>
             <li><a href="#isik-specific-features">ISiK-specific Features</a></li>
-            <li><a href="#patient-merge---merge-and-subscription-notifications">Patient Merge &amp; Subscription Notifications</a></li>
         </ul>
     </li>
     <li><a href="#contributing">Contributing</a></li>
@@ -325,7 +324,7 @@ For active subscriptions the server supports **heartbeat notifications** as spec
 ##### How to test
 
 The following steps simulate the merge-notification workflow. A Postman Collection with ready-made requests is available
-in the `PostmanCollection` folder of this repository.
+in the `src/test/resources/subscription` folder of this repository.
 
 You need a REST endpoint that accepts `POST /Bundle`. Options:
 
@@ -333,9 +332,9 @@ You need a REST endpoint that accepts `POST /Bundle`. Options:
   the subscription endpoint.
 - **Second HAPI FHIR server**:
   ```bash
-  docker run -p 8081:8080 \
+  docker run -p 8080:8080 \
     -e hapi.fhir.allowed_bundle_types=COLLECTION,DOCUMENT,MESSAGE,TRANSACTION,TRANSACTIONRESPONSE,BATCH,BATCHRESPONSE,HISTORY,SEARCHSET \
-    hapiproject/hapi:latest
+    gematik1/isik-mock-server:latest
   ```
 
 Steps:
