@@ -22,6 +22,7 @@
         <a href="#usage">Usage</a>
         <ul>
             <li><a href="#isik-specific-features">ISiK-specific Features</a></li>
+            <li><a href="#patient-merge---merge-and-subscription-notifications">Patient Merge &amp; Subscription Notifications</a></li>
         </ul>
     </li>
     <li><a href="#contributing">Contributing</a></li>
@@ -265,6 +266,90 @@ The server supports Requests with transaction `Bundles`, accepting `Bundle` Reso
 it validates incoming transaction bundles against the `ISiKMedikationTransaction` profile and for outgoing
 transaction-response bundles, the server enriches them with `Bundle.meta.profile` set to
 `ISiKMedikationTransactionResponse` and derives `Bundle.entry.fullUrl` from `entry.response.location`.
+
+#### Patient Merge - `$merge` and Subscription Notifications
+
+The server implements the HL7 Patient [`$merge`](https://hl7.org/fhir/patient-operation-merge.html) operation and FHIR
+Subscription Topic notifications based on
+the [Subscriptions R5 Backport IG](https://hl7.org/fhir/uv/subscriptions-backport/). Only **REST-hook subscriptions**
+are supported.
+
+The operation is invoked at type level on `Patient/$merge`. Source and target patient may be supplied either as a
+direct reference (`source-patient` / `target-patient`, type `Reference`) or via identifiers
+(`source-patient-identifier` / `target-patient-identifier`, type `Identifier`) — exactly one of the two must be given
+per patient. Optional parameters: `result-patient` (the expected final state of the target patient) and `preview`
+(`boolean`; when `true` the merge is validated but **not** persisted and no notification is sent).
+
+The operation returns a `Parameters` resource with an `outcome` (`OperationOutcome`) and the merged `result-patient`.
+
+The merge sets `Patient.link` of type `replaced-by` on the (deactivated) source patient pointing to the target, and a
+`replaces` link on the target patient. The `replaces` link is set as a **logical reference** (via the source patient's
+MR identifier) rather than a literal reference, because the ISiK specification permits the obsolete source patient to be
+deleted — a literal reference would then dangle. For this reason both patients must carry a populated PID
+(`Identifier.type = MR`).
+
+##### Responsible components
+
+The topic-based event notification itself (matching active subscriptions to a topic, building the notification bundle and
+delivering it to the `rest-hook` endpoint) is handled by **HAPI's built-in machinery** — `SubscriptionTopicConfig` and
+`SubscriptionProcessorConfig`, enabled in `HapiSubscriptionBeans`. The merge operation only *triggers* it via HAPI's
+`SubscriptionTopicDispatcher` (see `PatientMergeOperationProvider#patientMerge`).
+
+The classes in this repository cover the surrounding subscription lifecycle:
+
+| Concern | Class(es) |
+| --- | --- |
+| Trigger the topic notification on merge | `PatientMergeOperationProvider` (calls HAPI's `SubscriptionTopicDispatcher`) |
+| Handshake on `status=requested` | `SubscriptionCreateHandshakeInterceptor` → `SubscriptionHandshakeSender` → `SubscriptionHandshakeFinalizer` |
+| Heartbeat | `SubscriptionHeartbeatService`, `HeartBeatDispatchService`, `HeartbeatAwarePayloadBuilder` |
+
+##### Handshake
+
+When a new Subscription is created with `status=requested`, the server immediately sends a **handshake notification**
+to the subscriber's endpoint:
+
+- If the handshake succeeds (2xx HTTP response), the subscription is activated (`status=active`).
+- If it fails (connection error or non-2xx response), the subscription is set to `status=error`.
+
+This ensures that only reachable subscribers become active.
+
+##### Heartbeat
+
+For active subscriptions the server supports **heartbeat notifications** as specified in the backport IG:
+
+- The heartbeat interval is read from the `backport-heartbeat-period` extension on the subscription channel.
+- The server sends an empty notification bundle of type `heartbeat` to the subscriber's endpoint when the interval is
+  due.
+- This allows clients to detect broken connections even when no real events occur.
+
+##### How to test
+
+The following steps simulate the merge-notification workflow. A Postman Collection with ready-made requests is available
+in the `PostmanCollection` folder of this repository.
+
+You need a REST endpoint that accepts `POST /Bundle`. Options:
+
+- **Postman mock server**: Select "Mock servers", create a mock server with method `POST`, and use the displayed URL as
+  the subscription endpoint.
+- **Second HAPI FHIR server**:
+  ```bash
+  docker run -p 8081:8080 \
+    -e hapi.fhir.allowed_bundle_types=COLLECTION,DOCUMENT,MESSAGE,TRANSACTION,TRANSACTIONRESPONSE,BATCH,BATCHRESPONSE,HISTORY,SEARCHSET \
+    hapiproject/hapi:latest
+  ```
+
+Steps:
+
+1. Create the patients to be merged (`Postman: 1. Send Patients`).
+2. Subscribe to the topic `https://gematik.de/fhir/isik/SubscriptionTopic/patient-merge`, setting `.endpoint` to your
+   receiver URL (`Postman: 2. Subscribe to Patient merge topic`).
+3. Trigger the merge via `Patient/$merge`, either by direct reference with `source-patient` / `target-patient`
+   (`Postman: 3a. merge patients (by reference)`) or by identifier with `source-patient-identifier` /
+   `target-patient-identifier` (`Postman: 3b. merge patients (by identifier)`).
+4. Receive the notification Bundle at your endpoint.
+
+> **Note:** When using Postman mock servers, a stack trace may appear in the server log because Postman responds with
+> `Content-Type: text/html` instead of `application/fhir+json`. This does not affect notification delivery.
 
 ## Contributing
 
