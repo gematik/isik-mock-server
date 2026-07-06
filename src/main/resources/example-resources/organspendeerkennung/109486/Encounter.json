@@ -1,0 +1,75 @@
+{
+  "resourceType": "Encounter",
+  "id": "enc-109486",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKKontaktGesundheitseinrichtung"
+    ],
+    "tag": [
+      {
+        "system": "https://detect-study.de/fhir/CodeSystem/relevance",
+        "code": "False"
+      }
+    ]
+  },
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+            "code": "VN"
+          }
+        ]
+      },
+      "system": "https://example-krankenhaus.de/fhir/sid/aufnahmenummer",
+      "value": "Morgenstern-2021-04-06-001"
+    }
+  ],
+  "status": "in-progress",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "IMP"
+    
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://fhir.de/CodeSystem/Kontaktebene",
+          "code": "abteilungskontakt"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/pat-916112"
+  },
+  "period": {
+    "start": "2021-04-06T03:36:08+02:00"
+  },
+  "account": [
+    {
+      "identifier": {
+        "system": "https://example-krankenhaus.de/fhir/sid/fallnummer",
+        "value": "109486"
+      }
+    }
+  ],
+  "location": [
+    {
+      "location": {
+        "reference": "Location/CHITS"
+      },
+      "physicalType": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/location-physical-type",
+            "code": "wa",
+            "display": "Ward"
+          }
+        ]
+      }
+    }
+  ]
+}

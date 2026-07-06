@@ -1,0 +1,38 @@
+{
+  "resourceType": "Procedure",
+  "id": "proc-beatmung-542181",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedurBeatmung"
+    ]
+  },
+  "status": "in-progress",
+  "category": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "40617009",
+        "display": "Künstliche Beatmung",
+        "version": "http://snomed.info/sct/11000274103/version/20251115"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "428311008",
+        "display": "Non-invasive ventilation",
+        "version": "http://snomed.info/sct/11000274103/version/20251115"
+      }
+    ],
+    "text": "NIV"
+  },
+  "subject": {
+    "reference": "Patient/pat-423728"
+  },
+  "encounter": {
+    "reference": "Encounter/enc-542181"
+  },
+  "performedDateTime": "2020-06-07T05:38:44+02:00"
+}

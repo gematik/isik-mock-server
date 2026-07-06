@@ -1,0 +1,47 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-123918-serumnatrium-047",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKLaboruntersuchungSerumnatrium"
+    ]
+  },
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "2951-2",
+        "display": "Natrium [Mol/Volumen] in Serum oder Plasma"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/pat-543980"
+  },
+  "encounter": {
+    "reference": "Encounter/enc-123918"
+  },
+  "effectiveDateTime": "2020-05-19T05:00:00+02:00",
+  "valueQuantity": {
+    "value": 134.0,
+    "unit": "mmol/L",
+    "system": "http://unitsofmeasure.org",
+    "code": "mmol/L"
+  },
+  "performer": [
+    {
+      "reference": "Practitioner/Practitioner-Laborarzt"
+    }
+  ]
+}

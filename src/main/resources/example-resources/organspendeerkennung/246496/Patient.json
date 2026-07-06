@@ -1,0 +1,35 @@
+{
+  "resourceType": "Patient",
+  "id": "pat-746327",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKPatient"
+    ]
+  },
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+            "code": "MR"
+          }
+        ]
+      },
+      "system": "https://example-krankenhaus.de/fhir/sid/pid",
+      "value": "746327"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Sonnentanz",
+      "given": [
+        "Serin"
+      ]
+    }
+  ],
+  "gender": "female",
+  "birthDate": "1980-12-19"
+}

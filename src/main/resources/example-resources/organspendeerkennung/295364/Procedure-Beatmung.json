@@ -1,0 +1,38 @@
+{
+  "resourceType": "Procedure",
+  "id": "proc-beatmung-295364",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedurBeatmung"
+    ]
+  },
+  "status": "in-progress",
+  "category": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "40617009",
+        "display": "Künstliche Beatmung",
+        "version": "http://snomed.info/sct/11000274103/version/20251115"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "243142003",
+        "display": "Dual pressure spontaneous ventilation support",
+        "version": "http://snomed.info/sct/11000274103/version/20251115"
+      }
+    ],
+    "text": "DUO-PAP"
+  },
+  "subject": {
+    "reference": "Patient/pat-354978"
+  },
+  "encounter": {
+    "reference": "Encounter/enc-295364"
+  },
+  "performedDateTime": "2022-10-16T00:01:20+02:00"
+}

@@ -1,0 +1,75 @@
+{
+  "resourceType": "Encounter",
+  "id": "enc-652525",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKKontaktGesundheitseinrichtung"
+    ],
+    "tag": [
+      {
+        "system": "https://detect-study.de/fhir/CodeSystem/relevance",
+        "code": "False"
+      }
+    ]
+  },
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+            "code": "VN"
+          }
+        ]
+      },
+      "system": "https://example-krankenhaus.de/fhir/sid/aufnahmenummer",
+      "value": "Hochfels-2020-07-17-001"
+    }
+  ],
+  "status": "in-progress",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "IMP"
+    
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://fhir.de/CodeSystem/Kontaktebene",
+          "code": "abteilungskontakt"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/pat-945727"
+  },
+  "period": {
+    "start": "2020-07-17T16:20:10+02:00"
+  },
+  "account": [
+    {
+      "identifier": {
+        "system": "https://example-krankenhaus.de/fhir/sid/fallnummer",
+        "value": "652525"
+      }
+    }
+  ],
+  "location": [
+    {
+      "location": {
+        "reference": "Location/CHITS"
+      },
+      "physicalType": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/location-physical-type",
+            "code": "wa",
+            "display": "Ward"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-801534-rass",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/mii-pr-icu-score-rass"
+    ]
+  },
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "exam",
+          "display": "Exam"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "1345050000",
+        "display": "Richmond Agitation Sedation Scale score",
+        "version": "http://snomed.info/sct/11000274103/version/20251115"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/pat-491580"
+  },
+  "encounter": {
+    "reference": "Encounter/enc-801534"
+  },
+  "effectiveDateTime": "2022-03-21T07:53:58+01:00",
+  "valueCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "LA33959-0"
+      }
+    ]
+  }
+}

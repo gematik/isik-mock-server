@@ -2,6 +2,16 @@
 
 # Release Notes ISiK Mock Server
 
+## Release 5.1.1 (2026-07)
+
+### added
+
+- Example Resources for `Organsspendererkennung`
+
+### fixed
+
+- Load of resources from nested folders
+
 ## Release 5.1.0 (2026-07)
 
 ### added

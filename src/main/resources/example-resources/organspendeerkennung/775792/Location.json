@@ -1,0 +1,19 @@
+{
+  "resourceType": "Location",
+  "id": "NEUITS",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKStandort"
+    ]
+  },
+  "name": "NEUITS",
+  "physicalType": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/location-physical-type",
+        "code": "wa",
+        "display": "Ward"
+      }
+    ]
+  }
+}
