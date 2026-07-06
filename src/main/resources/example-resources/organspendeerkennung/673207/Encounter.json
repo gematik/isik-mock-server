@@ -1,0 +1,75 @@
+{
+  "resourceType": "Encounter",
+  "id": "enc-673207",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKKontaktGesundheitseinrichtung"
+    ],
+    "tag": [
+      {
+        "system": "https://detect-study.de/fhir/CodeSystem/relevance",
+        "code": "True"
+      }
+    ]
+  },
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+            "code": "VN"
+          }
+        ]
+      },
+      "system": "https://example-krankenhaus.de/fhir/sid/aufnahmenummer",
+      "value": "Waldtraum-2020-01-14-001"
+    }
+  ],
+  "status": "in-progress",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "IMP"
+    
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://fhir.de/CodeSystem/Kontaktebene",
+          "code": "abteilungskontakt"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/pat-465022"
+  },
+  "period": {
+    "start": "2020-01-14T03:18:13+01:00"
+  },
+  "account": [
+    {
+      "identifier": {
+        "system": "https://example-krankenhaus.de/fhir/sid/fallnummer",
+        "value": "673207"
+      }
+    }
+  ],
+  "location": [
+    {
+      "location": {
+        "reference": "Location/CHITS"
+      },
+      "physicalType": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/location-physical-type",
+            "code": "wa",
+            "display": "Ward"
+          }
+        ]
+      }
+    }
+  ]
+}

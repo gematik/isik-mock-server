@@ -1,0 +1,75 @@
+{
+  "resourceType": "Encounter",
+  "id": "enc-762876",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKKontaktGesundheitseinrichtung"
+    ],
+    "tag": [
+      {
+        "system": "https://detect-study.de/fhir/CodeSystem/relevance",
+        "code": "False"
+      }
+    ]
+  },
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+            "code": "VN"
+          }
+        ]
+      },
+      "system": "https://example-krankenhaus.de/fhir/sid/aufnahmenummer",
+      "value": "Wolfsherz-2021-02-02-001"
+    }
+  ],
+  "status": "in-progress",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "IMP"
+    
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://fhir.de/CodeSystem/Kontaktebene",
+          "code": "abteilungskontakt"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/pat-135767"
+  },
+  "period": {
+    "start": "2021-02-02T10:25:36+01:00"
+  },
+  "account": [
+    {
+      "identifier": {
+        "system": "https://example-krankenhaus.de/fhir/sid/fallnummer",
+        "value": "762876"
+      }
+    }
+  ],
+  "location": [
+    {
+      "location": {
+        "reference": "Location/NEUITS"
+      },
+      "physicalType": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/location-physical-type",
+            "code": "wa",
+            "display": "Ward"
+          }
+        ]
+      }
+    }
+  ]
+}

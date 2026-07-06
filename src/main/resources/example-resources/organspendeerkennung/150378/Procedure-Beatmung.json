@@ -1,0 +1,38 @@
+{
+  "resourceType": "Procedure",
+  "id": "proc-beatmung-150378",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedurBeatmung"
+    ]
+  },
+  "status": "in-progress",
+  "category": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "40617009",
+        "display": "Künstliche Beatmung",
+        "version": "http://snomed.info/sct/11000274103/version/20251115"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "1186622005",
+        "display": "Synchronized intermittent mandatory ventilation - pressure-control pressure-support inflation",
+        "version": "http://snomed.info/sct/11000274103/version/20251115"
+      }
+    ],
+    "text": "P-SIMV+"
+  },
+  "subject": {
+    "reference": "Patient/pat-444243"
+  },
+  "encounter": {
+    "reference": "Encounter/enc-150378"
+  },
+  "performedDateTime": "2021-06-08T07:29:20+02:00"
+}

@@ -1,0 +1,75 @@
+{
+  "resourceType": "Encounter",
+  "id": "enc-851504",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKKontaktGesundheitseinrichtung"
+    ],
+    "tag": [
+      {
+        "system": "https://detect-study.de/fhir/CodeSystem/relevance",
+        "code": "False"
+      }
+    ]
+  },
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+            "code": "VN"
+          }
+        ]
+      },
+      "system": "https://example-krankenhaus.de/fhir/sid/aufnahmenummer",
+      "value": "Silberfeder-2022-10-24-001"
+    }
+  ],
+  "status": "in-progress",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "IMP"
+    
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://fhir.de/CodeSystem/Kontaktebene",
+          "code": "abteilungskontakt"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/pat-976490"
+  },
+  "period": {
+    "start": "2022-10-24T02:08:31+02:00"
+  },
+  "account": [
+    {
+      "identifier": {
+        "system": "https://example-krankenhaus.de/fhir/sid/fallnummer",
+        "value": "851504"
+      }
+    }
+  ],
+  "location": [
+    {
+      "location": {
+        "reference": "Location/CHITS"
+      },
+      "physicalType": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/location-physical-type",
+            "code": "wa",
+            "display": "Ward"
+          }
+        ]
+      }
+    }
+  ]
+}

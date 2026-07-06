@@ -1,0 +1,35 @@
+{
+  "resourceType": "Patient",
+  "id": "pat-543980",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKPatient"
+    ]
+  },
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+            "code": "MR"
+          }
+        ]
+      },
+      "system": "https://example-krankenhaus.de/fhir/sid/pid",
+      "value": "543980"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Wulfhart",
+      "given": [
+        "Kael"
+      ]
+    }
+  ],
+  "gender": "male",
+  "birthDate": "1943-04-27"
+}

@@ -1,0 +1,19 @@
+{
+  "resourceType": "Location",
+  "id": "CHITS",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKStandort"
+    ]
+  },
+  "name": "CHITS",
+  "physicalType": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/location-physical-type",
+        "code": "wa",
+        "display": "Ward"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "resourceType": "Procedure",
+  "id": "proc-reanimation-183258",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedurReanimation"
+    ]
+  },
+  "status": "completed",
+  "category": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "439569004",
+        "display": "Resuscitation (procedure)",
+        "version": "http://snomed.info/sct/11000274103/version/20251115"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "version": "http://snomed.info/sct/11000274103/version/20251115",
+        "code": "89666000",
+        "display": "Kardiopulmonale Reanimation"
+      },
+      {
+        "system": "http://fhir.de/CodeSystem/bfarm/ops",
+        "version": "2024",
+        "code": "8-771",
+        "display": "Kardiale oder kardiopulmonale Reanimation"
+      }
+    ],
+    "text": "Herz-Lungen-Wiederbelebung"
+  },
+  "subject": {
+    "reference": "Patient/pat-355414"
+  },
+  "encounter": {
+    "reference": "Encounter/enc-183258"
+  },
+  "performedDateTime": "2020-06-07T11:10:00+02:00"
+}

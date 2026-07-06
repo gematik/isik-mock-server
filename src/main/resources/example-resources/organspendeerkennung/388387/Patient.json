@@ -1,0 +1,35 @@
+{
+  "resourceType": "Patient",
+  "id": "pat-484125",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKPatient"
+    ]
+  },
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+            "code": "MR"
+          }
+        ]
+      },
+      "system": "https://example-krankenhaus.de/fhir/sid/pid",
+      "value": "484125"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Felsmeer",
+      "given": [
+        "Ember"
+      ]
+    }
+  ],
+  "gender": "female",
+  "birthDate": "1990-06-21"
+}

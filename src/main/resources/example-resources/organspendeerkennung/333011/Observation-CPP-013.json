@@ -1,0 +1,49 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-333011-cpp-013",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/mii-pr-icu-muv-zerebraler-perfusionsdruck"
+    ]
+  },
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "vital-signs"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "61017-0",
+        "display": "Cerebral perfusion pressure",
+        "version": "2.82"
+      },
+      {
+        "system": "http://snomed.info/sct",
+        "code": "250846007",
+        "display": "Cerebral perfusion pressure",
+        "version": "http://snomed.info/sct/11000274103/version/20251115"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/pat-441207"
+  },
+  "encounter": {
+    "reference": "Encounter/enc-333011"
+  },
+  "effectiveDateTime": "2021-12-28T14:00:00+01:00",
+  "valueQuantity": {
+    "value": 57.0,
+    "unit": "millimeter Mercury column",
+    "system": "http://unitsofmeasure.org",
+    "code": "mm[Hg]"
+  }
+}

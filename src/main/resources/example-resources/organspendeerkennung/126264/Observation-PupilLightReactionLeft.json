@@ -1,0 +1,61 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-126264-pupil-left",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/mii-pr-icu-untersuchung-pupillenlichtreaktion-direkt"
+    ]
+  },
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "exam",
+          "display": "Exam"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "45832002",
+        "display": "Pupil afferent light reaction",
+        "version": "http://snomed.info/sct/11000274103/version/20251115"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/pat-334995"
+  },
+  "encounter": {
+    "reference": "Encounter/enc-126264"
+  },
+  "effectiveDateTime": "2021-01-23T00:56:10+01:00",
+  "note": [
+    {
+      "text": "Quelle: left pupil reaction = prompt"
+    }
+  ],
+  "bodySite": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "16089004",
+        "display": "Structure of pupil of left eye"
+      }
+    ]
+  },
+  "valueCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "LA25441-9",
+        "display": "Reactive to light"
+      }
+    ]
+  }
+}

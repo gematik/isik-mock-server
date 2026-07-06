@@ -34,6 +34,7 @@ import de.gematik.isik.mockserver.interceptor.FhirValidationHandler;
 import de.gematik.refv.commons.exceptions.ValidationModuleInitializationException;
 import de.gematik.refv.commons.validation.ValidationResult;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -47,15 +48,13 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -65,6 +64,7 @@ import java.util.stream.Stream;
 public class ResourceLoader {
 	private static final String CONFORMANCE_RESOURCES_FOLDER = "conformance";
 
+	@Getter
 	@Value("${example-fhir-resources.directory:example-resources}")
 	private String exampleResourcesDirectory;
 
@@ -92,10 +92,6 @@ public class ResourceLoader {
 		}
 	}
 
-	public String getExampleResourcesDirectory() {
-		return exampleResourcesDirectory;
-	}
-
 	public void loadResources() {
 		final List<IBaseResource> resourcesFromFolder = getResourcesFromFolder(CONFORMANCE_RESOURCES_FOLDER);
 		for (final IBaseResource r : resourcesFromFolder) {
@@ -116,8 +112,8 @@ public class ResourceLoader {
 		List<Bundle.BundleEntryComponent> entries = resourcesFromFolder.parallelStream()
 				.map(r -> {
 					log.info(
-							"Preparing resource for loading: {} - {}",
-							r.getClass(),
+							"Preparing {} for loading with Id: {}",
+							r.getClass().getSimpleName(),
 							r.getIdElement().getIdPart());
 
 					String jsonString = jsonParser.encodeResourceToString(r);
@@ -152,7 +148,7 @@ public class ResourceLoader {
 							return null;
 						}
 					} else {
-						log.info(
+						log.debug(
 								"Validation disabled for resource: {} - {}",
 								r.getClass(),
 								r.getIdElement().getIdPart());
@@ -186,58 +182,69 @@ public class ResourceLoader {
 
 		// 2) Filesystem directory (external folder)
 		log.info("Attempting to read resources from filesystem folder: {}", folder);
-		readResourcesFromFilesystemFolderIfExists(folder, resources);
+		readResourcesFromFilesystemFolderIfExists(Path.of(folder), resources);
 
 		return resources;
 	}
 
-	@SneakyThrows
 	private boolean tryReadResourcesFromClasspath(@NonNull String folder, @NonNull List<IBaseResource> output) {
 		try {
 			ClassLoader cl = this.getClass().getClassLoader();
 			ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(cl);
-			Resource[] classpathResources = resolver.getResources("classpath*:/" + folder + "/*.*");
-
-			for (Resource resource : classpathResources) {
-				IBaseResource r;
-				try (InputStream in = resource.getInputStream();
-						BOMInputStream bomStream = new BOMInputStream(in)) {
-					String filename = resource.getFilename();
-					if (filename == null) {
-						throw new IllegalStateException("Could not retrieve resource filename");
-					}
-					r = convertToFhirResource(bomStream, filename);
-				}
-				output.add(r);
-			}
+			Resource[] flatPathResources = resolver.getResources("classpath*:/" + folder + "/*.*");
+			log.info("Importing {} resources from {}", flatPathResources.length, folder);
+			Resource[] nestedPathResources = resolver.getResources("classpath*:/" + folder + "/**/*");
+			log.info("Importing {} nested resources from {}", nestedPathResources.length, folder);
+			importResources(output, flatPathResources);
 
 			log.info("Loaded {} resources from classpath folder `{}`", output.size(), folder);
 			return true;
 		} catch (Exception e) {
-			log.info("Could not read resources from classpath folder `{}`", folder, e);
+			log.warn("Could not read resources from classpath folder `{}`", folder, e);
 			return false;
 		}
 	}
 
-	@SneakyThrows
-	private void readResourcesFromFilesystemFolderIfExists(String folder, List<IBaseResource> resources) {
-		Path dir = Paths.get(folder).toAbsolutePath().normalize();
+	private void readResourcesFromFilesystemFolderIfExists(Path folder, List<IBaseResource> resources) {
+		final Path dir = folder.toAbsolutePath().normalize();
 		if (!Files.isDirectory(dir)) {
 			log.debug("Filesystem folder `{}` does not exist or is not a directory; skipping.", dir);
 			return;
 		}
 
 		try (Stream<Path> stream = Files.walk(dir)) {
-			List<Path> files = stream.filter(Files::isRegularFile)
-					.filter(p -> {
-						String name = p.getFileName().toString().toLowerCase();
-						return name.endsWith(".json") || name.endsWith(".xml");
-					})
-					.toList();
+			final List<Path> subfolders = new ArrayList<>();
+			final List<Path> files = new ArrayList<>();
+			stream.forEach(path -> {
+				if (!Files.isRegularFile(path)) {
+					return;
+				}
+				if (Files.isDirectory(path)) {
+					subfolders.add(path);
+					return;
+				}
 
+				final String name = path.getFileName().toString().toLowerCase(Locale.ROOT);
+				if (name.endsWith(".json") || name.endsWith(".xml")) {
+					files.add(path);
+				}
+			});
+
+			log.info("Number of subfolders found:  {}", subfolders.size());
+			log.info("Number of files found:  {}", files.size());
+
+			// Iterate over the subfolders for reading files
+			for (Path subfolder : subfolders) {
+				readResourcesFromFilesystemFolderIfExists(subfolder, resources);
+			}
+
+			// read files from current folder
 			for (Path path : files) {
+				log.info("Importing {}", path);
 				IBaseResource resource;
-				try (BOMInputStream bomStream = new BOMInputStream(Files.newInputStream(path))) {
+				try (BOMInputStream bomStream = BOMInputStream.builder()
+						.setInputStream(Files.newInputStream(path))
+						.get()) {
 					resource =
 							convertToFhirResource(bomStream, path.getFileName().toString());
 				}
@@ -245,47 +252,8 @@ public class ResourceLoader {
 			}
 
 			log.info("Loaded {} resources from filesystem folder `{}`", resources.size(), dir);
-		}
-	}
-
-	@SneakyThrows
-	private void readResourcesFromFolderIfNonJarEnvironment(String folder, List<IBaseResource> resources) {
-		var paths = getAllFilesFromResourceSubfolder(folder);
-		for (File file : paths) {
-			Path path = file.toPath();
-			IBaseResource resource;
-			try (final var bomStream = new BOMInputStream(Files.newInputStream(path))) {
-				resource = convertToFhirResource(bomStream, path.toString());
-			}
-			resources.add(resource);
-		}
-
-		log.info("Loaded {} resources from folder '{}'", resources.size(), folder);
-	}
-
-	@SneakyThrows
-	private boolean tryReadResourcesFromJarIfInJarEnvironment(
-			@NonNull String folder, @NonNull List<IBaseResource> output) {
-		try {
-			ClassLoader cl = this.getClass().getClassLoader();
-			ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(cl);
-			Resource[] jarResources = resolver.getResources("classpath*:/" + folder + "/*.*");
-
-			for (Resource resource : jarResources) {
-				IBaseResource r;
-				try (final var bomStream = new BOMInputStream(resource.getInputStream())) {
-					String filename = resource.getFilename();
-					if (filename == null) throw new IllegalStateException("Could not retrieve resource filename");
-
-					r = convertToFhirResource(bomStream, filename);
-				}
-				output.add(r);
-			}
-			log.info("Loaded {} resources from JAR folder '{}'", output.size(), folder);
-			return true;
 		} catch (Exception e) {
-			log.info("Could not read resources from JAR", e);
-			return false;
+			log.warn("Could not read resources from filesystem folder `{}`: {}", folder, e.getMessage(), e);
 		}
 	}
 
@@ -300,23 +268,7 @@ public class ResourceLoader {
 		return r;
 	}
 
-	@SneakyThrows
-	private List<File> getAllFilesFromResourceSubfolder(String folder) {
-
-		ClassLoader classLoader = getClass().getClassLoader();
-
-		URL resource = classLoader.getResource(folder);
-		if (resource == null) {
-			log.debug("Resource folder '{}' not found on classpath; skipping load.", folder);
-			return List.of();
-		}
-
-		URI uri = resource.toURI();
-		try (Stream<Path> stream = Files.walk(Paths.get(uri))) {
-			return stream.filter(Files::isRegularFile).map(Path::toFile).toList();
-		}
-	}
-
+	@SuppressWarnings("unchecked")
 	private void upsertExampleInServer(final IBaseResource resource) {
 		if (resource instanceof Bundle resourceBundle) {
 			daoRegistry.getSystemDao().transaction(null, resourceBundle);
@@ -325,5 +277,22 @@ public class ResourceLoader {
 		final IFhirResourceDao<IBaseResource> dao =
 				daoRegistry.getResourceDao((Class<IBaseResource>) resource.getClass());
 		dao.update(resource, (RequestDetails) null);
+	}
+
+	private void importResources(@NonNull List<IBaseResource> output, Resource[] classpathResources)
+			throws IOException {
+		for (Resource resource : classpathResources) {
+			IBaseResource r;
+			try (InputStream in = resource.getInputStream();
+					BOMInputStream bomStream =
+							BOMInputStream.builder().setInputStream(in).get()) {
+				String filename = resource.getFilename();
+				if (filename == null) {
+					throw new IllegalStateException("Could not retrieve resource filename");
+				}
+				r = convertToFhirResource(bomStream, filename);
+			}
+			output.add(r);
+		}
 	}
 }

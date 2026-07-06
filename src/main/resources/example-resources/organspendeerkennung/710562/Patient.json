@@ -1,0 +1,35 @@
+{
+  "resourceType": "Patient",
+  "id": "pat-887637",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKPatient"
+    ]
+  },
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+            "code": "MR"
+          }
+        ]
+      },
+      "system": "https://example-krankenhaus.de/fhir/sid/pid",
+      "value": "887637"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Wellenbrecher",
+      "given": [
+        "Talia"
+      ]
+    }
+  ],
+  "gender": "female",
+  "birthDate": "1958-09-05"
+}
