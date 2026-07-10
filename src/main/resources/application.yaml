@@ -160,6 +160,17 @@ spring:
           #     synchronization:
           #       strategy: async
 
+  security:
+    oauth2:
+      enable: false
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9090/realms/fhir
+          jwk-set-uri: http://localhost:9090/realms/fhir/protocol/openid-connect/certs
+      # SMART on FHIR bridge — derived endpoint URLs are built from these two base URLs.
+      smart:
+        fhir-base-url: http://localhost:8080/fhir
+        authorization-server-url: http://localhost:9090/realms/fhir
 # -------------------------------------------------------------------------------------
 # HAPI FHIR — grouped by domain
 # -------------------------------------------------------------------------------------
@@ -384,7 +395,7 @@ hapi:
     # comma-separated package names, will be @ComponentScan'ed by Spring to allow for creating custom Spring beans
 
     custom-bean-packages: "de.gematik.isik.mockserver"
-    custom-interceptor-classes: "de.gematik.isik.mockserver.interceptor.DocumentPOSTInterceptor,de.gematik.isik.mockserver.interceptor.FhirValidationInterceptor,de.gematik.isik.mockserver.interceptor.AppointmentPatchInterceptor,de.gematik.isik.mockserver.interceptor.DocumentReferencePreStorageInterceptor,de.gematik.isik.mockserver.interceptor.MediaTypeInterceptor,de.gematik.isik.mockserver.interceptor.TransactionResponseProfileInterceptor,de.gematik.isik.mockserver.subscription.interceptor.SubscriptionCreateHandshakeInterceptor"
+    custom-interceptor-classes: "de.gematik.isik.mockserver.interceptor.SmartCapabilityStatementInterceptor,de.gematik.isik.mockserver.interceptor.SmartAuthorizationInterceptor,de.gematik.isik.mockserver.interceptor.DocumentPOSTInterceptor,de.gematik.isik.mockserver.interceptor.FhirValidationInterceptor,de.gematik.isik.mockserver.interceptor.AppointmentPatchInterceptor,de.gematik.isik.mockserver.interceptor.DocumentReferencePreStorageInterceptor,de.gematik.isik.mockserver.interceptor.MediaTypeInterceptor,de.gematik.isik.mockserver.interceptor.TransactionResponseProfileInterceptor,de.gematik.isik.mockserver.subscription.interceptor.SubscriptionCreateHandshakeInterceptor"
     custom-provider-classes: "de.gematik.isik.mockserver.provider.EncounterSearchByIdentifierModifierProvider,de.gematik.isik.mockserver.provider.DocumentReferenceResourceProvider,de.gematik.isik.mockserver.provider.ValueSetSearchByContextTypeValueProvider,de.gematik.isik.mockserver.operation.AppointmentBookOperation,de.gematik.isik.mockserver.operation.DocumentReferenceGenerateMetadataOperation,de.gematik.isik.mockserver.operation.DocumentReferenceUpdateMetadataOperation,de.gematik.isik.mockserver.provider.PatientMergeOperationProvider"
     # store_meta_source_information: NONE
     # bundle_batch_pool_size: 10

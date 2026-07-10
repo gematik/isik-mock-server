@@ -1,0 +1,37 @@
+services:
+  isik-keycloak:
+    image: quay.io/keycloak/keycloak:26.6.4
+    container_name: isik-keycloak
+    command: start-dev --import-realm
+    ports:
+      - "9090:8080"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      # Set advertisement
+      KC_HOSTNAME: "http://172.17.0.1:9090"
+      KC_HOSTNAME_STRICT: "false"
+      # enable health check
+      KC_HEALTH_ENABLED: "true"
+      # Overwrite realm on restart
+      KC_SPI_IMPORT_STRATEGY: OVERWRITE_EXISTING
+    volumes:
+      - ./configs/smart/keycloak/realms/fhir.json:/opt/keycloak/data/import/fhir-realm.json:ro
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/keycloak/bin/kc.sh show-config 2>/dev/null || exit 1"]
+      interval: 15s
+      timeout: 10s
+      start_period: 30s
+      retries: 6
+
+  isik-mock-server:
+    environment:
+      # SMART-on-FHIR / OAuth2
+      SPRING_SECURITY_OAUTH2_ENABLE: "true"
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: "http://172.17.0.1:9090/realms/fhir"
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "http://172.17.0.1:9090/realms/fhir/protocol/openid-connect/certs"
+      SPRING_SECURITY_OAUTH2_SMART_AUTHORIZATION_SERVER_URL: "http://172.17.0.1:8080/realms/fhir"
+      SPRING_SECURITY_OAUTH2_SMART_FHIR_BASE_URL: "http://172.17.0.1:8080/fhir"
+    depends_on:
+      isik-keycloak:
+        condition: service_healthy

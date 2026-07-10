@@ -65,7 +65,7 @@ docker run --rm -it -p 8080:8080 gematik1/isik-mock-server:latest
 You can run the server as a Docker Container with dedicated PostgreSQL Database by issuing the command:
 
 ```bash
-docker compose up -d
+docker compose --project-name isik-mock-server up -d
 ```
 
 The server will then be accessible at http://localhost:8080/fhir and eg. http://localhost:8080/fhir/metadata after some
@@ -87,7 +87,7 @@ This Mock Server comes with some example FHIR Resources that are loaded on start
 providing a folder containing FHIR Resources in JSON or XML format.
 
 To do this, you need to set the property `example-fhir-resources.directory` in the `application.yml` file to the path of
-your folder. The server will then load all the FHIR Resources from that folder on startup.
+your folder. The server will then load all the FHIR Resources from that folder recursively on startup.
 
 If you use the Docker Image, you can mount a volume in the container to provide the folder with your custom resources.
 For example:
@@ -289,18 +289,19 @@ deleted — a literal reference would then dangle. For this reason both patients
 
 ##### Responsible components
 
-The topic-based event notification itself (matching active subscriptions to a topic, building the notification bundle and
+The topic-based event notification itself (matching active subscriptions to a topic, building the notification bundle
+and
 delivering it to the `rest-hook` endpoint) is handled by **HAPI's built-in machinery** — `SubscriptionTopicConfig` and
 `SubscriptionProcessorConfig`, enabled in `HapiSubscriptionBeans`. The merge operation only *triggers* it via HAPI's
 `SubscriptionTopicDispatcher` (see `PatientMergeOperationProvider#patientMerge`).
 
 The classes in this repository cover the surrounding subscription lifecycle:
 
-| Concern | Class(es) |
-| --- | --- |
-| Trigger the topic notification on merge | `PatientMergeOperationProvider` (calls HAPI's `SubscriptionTopicDispatcher`) |
-| Handshake on `status=requested` | `SubscriptionCreateHandshakeInterceptor` → `SubscriptionHandshakeSender` → `SubscriptionHandshakeFinalizer` |
-| Heartbeat | `SubscriptionHeartbeatService`, `HeartBeatDispatchService`, `HeartbeatAwarePayloadBuilder` |
+| Concern                                 | Class(es)                                                                                                   |
+|-----------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| Trigger the topic notification on merge | `PatientMergeOperationProvider` (calls HAPI's `SubscriptionTopicDispatcher`)                                |
+| Handshake on `status=requested`         | `SubscriptionCreateHandshakeInterceptor` → `SubscriptionHandshakeSender` → `SubscriptionHandshakeFinalizer` |
+| Heartbeat                               | `SubscriptionHeartbeatService`, `HeartBeatDispatchService`, `HeartbeatAwarePayloadBuilder`                  |
 
 ##### Handshake
 
@@ -349,6 +350,52 @@ Steps:
 
 > **Note:** When using Postman mock servers, a stack trace may appear in the server log because Postman responds with
 > `Content-Type: text/html` instead of `application/fhir+json`. This does not affect notification delivery.
+
+#### Feature Preview: SMART-on-FHIR
+
+As specified in
+the [ISiK Connect Implementation Guide](https://simplifier.net/guide/isik-connect-stufe-5/ImplementationGuide-markdown-Kontext?version=current),
+the server implements the SMART-on-FHIR v2 Capabilities.
+
+The functionality can be enabled by configuring the following properties:
+
+```yaml
+spring:
+  security:
+    oauth2:
+      enable: true
+      resourceserver:
+        jwt:
+          # SpringBoot specific properties for the Issuer Server
+          issuer-uri: http://authorization.server.example/realms/fhir
+          jwk-set-uri: http://authorization.server.example/realms/fhir/protocol/openid-connect/certs
+      # SMART on FHIR Endpoints
+      smart:
+        # Defines the current FHIR Resource Server
+        fhir-base-url: http://localhost:8080/fhir
+        # Defines the Authorization Server
+        authorization-server-url: http://authorization.server.example/realms/fhir
+```
+
+When the property `spring.security.oauth2.enable` is set to `true`, the server will require an authorization for
+accessing resources, following the SMART-on-FHIR specification.
+The following Endpoints will be registered in the server:
+
+| Endpoint                                | Description                                                                                        |
+|-----------------------------------------|----------------------------------------------------------------------------------------------------|
+| `/fhir/.well-known/smart-configuration` | Provides the SMART-on-FHIR configuration                                                           |
+| `/fhir/token/introspect`                | Provides the Introspection of Token. Internally, it routes the request to the Authorization Server |
+| `/fhir/launch`                          | Provides the SMART-App-Launch endpoint                                                             |
+
+**NOTE**: When the property `spring.security.oauth2.enable` is set to `false`, the whole SpringBoot Security context is
+disabled, including the session management and the handling of CSRF tokens, which may interfere with existing
+integration tests in this repository.
+
+To tests the SMART Capabilities, an initial Keycloak setup has been provided, with the required scope mappings, extending the Docker Compose environment:
+
+```shell
+docker compose --project-name isik-mock-server -f docker-compose.yml -f docker-compose.smart.yml up -d
+```
 
 ## Contributing
 

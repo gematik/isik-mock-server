@@ -1,0 +1,11 @@
+spring:
+  security:
+    oauth2:
+      enable: true
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9999/realms/test
+          jwk-set-uri: http://localhost:9999/realms/test/protocol/openid-connect/certs
+      smart:
+        fhir-base-url: http://localhost:8080/fhir
+        authorization-server-url: http://localhost:9999/realms/test
