@@ -2,6 +2,17 @@
 
 # Release Notes ISiK Mock Server
 
+## Release 5.2.0 (2026-07)
+
+### added
+
+- SMART-on-FHIR v2 Capabilities for supporting `ISiK Connect` Scenarios
+
+### changed
+
+- Renamed the PostgreSQL Docker Container to `isik-mock-db` in the `docker-compose.yml` file
+- Updated dependencies
+
 ## Release 5.1.1 (2026-07)
 
 ### added
