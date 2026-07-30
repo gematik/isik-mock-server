@@ -2,7 +2,7 @@
   "id": "3779da36-84aa-49f8-8add-0697ef76d340",
   "realm": "fhir",
   "displayName": "SMART-on-FHIR",
-  "defaultSignatureAlgorithm": "HS256",
+  "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": true,
   "enabled": true,
   "refreshTokenMaxReuse": 1,
@@ -140,7 +140,7 @@
   "clientScopes": [
     {
       "id": "ab93f1d6-eb35-4fc6-b4ce-72a8758700ec",
-      "name": "smart-fhir-user",
+      "name": "fhirUser",
       "description": "Maps the fhirUser claim to the user attribute fhirUser",
       "protocol": "openid-connect",
       "attributes": {
@@ -172,7 +172,7 @@
     },
     {
       "id": "b2165a73-7175-4902-a0eb-839b696a15f4",
-      "name": "smart-launch-patient",
+      "name": "launch/patient",
       "description": "SMART App Launch Patient Scope - Maps the patient claim to the user attribute patient_id",
       "protocol": "openid-connect",
       "attributes": {
@@ -234,7 +234,7 @@
     },
     {
       "id": "f99b3e80-a0f3-4137-8b15-e6faafa3a7cb",
-      "name": "smart-launch-encounter",
+      "name": "launch/encounter",
       "description": "SMART App Launch Encounter Scope - Maps the encounter claim to the user attribute encounter_id",
       "protocol": "openid-connect",
       "attributes": {
@@ -293,6 +293,83 @@
           }
         }
       ]
+    },
+    {
+      "id": "66c00d80-e296-4b52-a328-2f86f142eadd",
+      "name": "patient/*.rs",
+      "description": "Patient Scope Level for Read and Search",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-audience-mapper",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true"
+      }
+    },
+    {
+      "id": "e6ece27b-52cc-4eac-a880-c0e5cd2f556d",
+      "name": "patient/*.cruds",
+      "description": "Patient Scope Level for Create, Read, Update, Delete and Search",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-audience-mapper",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true"
+      }
+    },
+    {
+      "id": "ccd76cbf-acff-4cd5-bb42-8a8f2d09b1d4",
+      "name": "user/*.rs",
+      "description": "User Scope Level for Read and Search",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-audience-mapper",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true"
+      }
+    },
+    {
+      "id": "76d635ee-4c63-4062-8d66-2eea86d16f38",
+      "name": "user/*.cruds",
+      "description": "User Scope Level for Create, Read, Update, Delete and Search",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-audience-mapper",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true"
+      }
+    },
+    {
+      "id": "db098bff-8c13-4422-b52b-597d040f0fa6",
+      "name": "system/*.rs",
+      "description": "System Scope Level for Read and Search",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-audience-mapper",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true"
+      }
+    },
+    {
+      "id": "1aebc95e-6302-439c-9945-720dcc0d6f52",
+      "name": "system/*.cruds",
+      "description": "System Scope Level for Create, Read, Update, Delete and Search",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-audience-mapper",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true"
+      }
+    },
+    {
+      "id": "e04f5a92-a023-48f9-bddb-a15785b787c7",
+      "name": "launch",
+      "description": "SMART App Launch Scope",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-audience-mapper",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true"
+      }
     },
     {
       "id": "d09e9ff4-4471-49c2-8612-a39894050731",
@@ -673,7 +750,7 @@
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": false,
       "serviceAccountsEnabled": false,
-      "publicClient": false,
+      "publicClient": true,
       "protocol": "openid-connect",
       "attributes": {
         "pkce.code.challenge.method": "S256"
@@ -682,11 +759,16 @@
         "profile",
         "email",
         "roles",
-        "smart-fhir-user"
+        "fhirUser"
       ],
       "optionalClientScopes": [
-        "smart-launch-patient",
-        "smart-launch-encounter",
+        "patient/*.rs",
+        "patient/*.cruds",
+        "user/*.rs",
+        "user/*.cruds",
+        "launch",
+        "launch/patient",
+        "launch/encounter",
         "offline_access"
       ]
     },
@@ -718,10 +800,12 @@
         "profile",
         "email",
         "roles",
-        "smart-fhir-user"
+        "fhirUser"
       ],
       "optionalClientScopes": [
-        "smart-launch-patient",
+        "patient/*.rs",
+        "patient/*.cruds",
+        "launch/patient",
         "offline_access"
       ]
     },
@@ -736,7 +820,8 @@
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": false,
       "optionalClientScopes": [
-        "smart-system-rs",
+        "system/*.rs",
+        "system/*.cruds",
         "offline_access"
       ]
     }
@@ -758,7 +843,9 @@
         }
       ],
       "attributes": {
-        "fhirUser": "Practitioner/Practitioner-Read-Example"
+        "fhirUser": "Practitioner/Practitioner-Read-Example",
+        "patient_id": "Patient-Read-Example",
+        "encounter_id": "Encounter-Read-In-Progress-Example"
       }
     },
     {
@@ -777,7 +864,8 @@
         }
       ],
       "attributes": {
-        "fhirUser": "Patient/Patient-Read-Example"
+        "fhirUser": "Patient/Patient-Read-Example",
+        "patient_id": "Patient-Read-Example"
       }
     }
   ]

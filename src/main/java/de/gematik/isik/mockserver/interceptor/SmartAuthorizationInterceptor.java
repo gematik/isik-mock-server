@@ -120,7 +120,6 @@ public class SmartAuthorizationInterceptor extends AuthorizationInterceptor {
 
 		// Read patient context directly from the JWT claim.
 		final String patientId = jwt.getClaimAsString(RESOURCE_PATIENT.toLowerCase(Locale.ROOT));
-
 		boolean hasValidScopes = false;
 		for (String rawScope : scopeString.trim().split("\\s+")) {
 			// Explicitly skip well-known OIDC / SMART non-resource scopes.
@@ -192,7 +191,9 @@ public class SmartAuthorizationInterceptor extends AuthorizationInterceptor {
 			final IIdType compartmentId = new IdType(RESOURCE_PATIENT, patientId);
 			List<IAuthRule> result = new ArrayList<>();
 			// Rule 1: search allow (tester ensures this rule is skipped for instance reads).
-			result.addAll(buildSearchRules(scope, ruleName));
+			if (scope.canSearch()) {
+				result.addAll(buildSearchRules(scope, ruleName));
+			}
 			// Rule 2: compartment read (allows own record, abstains for others → denyAll fires).
 			result.addAll(buildInCompartmentRules(scope, ruleName, compartmentId));
 

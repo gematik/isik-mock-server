@@ -3,7 +3,7 @@
   "id": "Encounter-Test-Example",
   "meta": {
     "profile": [
-      "https://gematik.de/fhir/isik/StructureDefinition/ISiKTerminKontaktMitGesundheitseinrichtung"
+      "https://gematik.de/fhir/isik/StructureDefinition/ISiKKontaktGesundheitseinrichtung"
     ]
   },
   "type": [

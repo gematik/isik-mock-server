@@ -1,5 +1,5 @@
 # Declare Source Digest for the Base Image
-FROM gematik1/osadl-alpine-openjdk21-jre:1.0.12@sha256:c555a8bc3f15bbd957c99486ac8100539ac6021089612401aa646b12f7f6698f
+FROM gematik1/osadl-alpine-openjdk21-jre:1.0.13@sha256:fdd4bd2837e725c6dc4e7517f66cec974824d573e0deade74a0246bb5f5900a2
 
 # The STOPSIGNAL instruction sets the system call signal that will be sent to the container to exit
 # SIGTERM = 15 - https://de.wikipedia.org/wiki/Signal_(Unix)
