@@ -30,7 +30,7 @@ services:
       SPRING_SECURITY_OAUTH2_ENABLE: "true"
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: "http://172.17.0.1:9090/realms/fhir"
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "http://172.17.0.1:9090/realms/fhir/protocol/openid-connect/certs"
-      SPRING_SECURITY_OAUTH2_SMART_AUTHORIZATION_SERVER_URL: "http://172.17.0.1:8080/realms/fhir"
+      SPRING_SECURITY_OAUTH2_SMART_AUTHORIZATION_SERVER_URL: "http://172.17.0.1:9090/realms/fhir"
       SPRING_SECURITY_OAUTH2_SMART_FHIR_BASE_URL: "http://172.17.0.1:8080/fhir"
     depends_on:
       isik-keycloak:

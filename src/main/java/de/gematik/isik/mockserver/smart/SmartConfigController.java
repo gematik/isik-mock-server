@@ -27,6 +27,7 @@ package de.gematik.isik.mockserver.smart;
 
 import ca.uhn.fhir.jpa.starter.security.Oauth2SecurityConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -63,7 +64,7 @@ public class SmartConfigController {
 	 * <p>Mapped to {@code /fhir/.well-known/smart-configuration} so that the path falls under the
 	 * FHIR base context and is reachable relative to the {@code iss} parameter the server advertises.
 	 */
-	@GetMapping("/fhir/.well-known/smart-configuration")
+	@GetMapping(value = "/fhir/.well-known/smart-configuration", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> config() {
 		Map<String, Object> doc = new LinkedHashMap<>();
 
@@ -75,7 +76,7 @@ public class SmartConfigController {
 		doc.put(
 				"token_endpoint_auth_methods_supported",
 				List.of("client_secret_basic", "client_secret_post", "private_key_jwt"));
-		doc.put("token_endpoint_auth_signing_alg_values_supported", List.of("RS384", "ES384"));
+		doc.put("token_endpoint_auth_signing_alg_values_supported", List.of("RS256", "RS384", "ES256", "ES384"));
 		doc.put("grant_types_supported", List.of("authorization_code", "client_credentials", "refresh_token"));
 		doc.put("response_types_supported", List.of("code"));
 		doc.put("code_challenge_methods_supported", List.of("S256"));

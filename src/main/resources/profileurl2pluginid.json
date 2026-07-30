@@ -33,7 +33,6 @@
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKMedizinischeBehandlungseinheit",
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKTermin",
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKTerminblock",
-    "https://gematik.de/fhir/isik/StructureDefinition/ISiKTerminKontaktMitGesundheitseinrichtung",
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKTerminPriorityExtension",
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKAtemfrequenz",
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKBlutdruckSystemischArteriell",

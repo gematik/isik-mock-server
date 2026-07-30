@@ -2,6 +2,19 @@
 
 # Release Notes ISiK Mock Server
 
+## Release 5.2.1 (2026-07)
+
+### changed
+
+- Updated ISiK Plugin to the Specification Version 5.1.3
+- Removed the unused Profile `ISiKTerminKontaktMitGesundheitseinrichtung` (see https://github.com/gematik/spec-ISiK-Basismodul/pull/1263)
+- Improved example of Keycloak Realm Configuration for the SMART-on-FHIR v2 Flow
+- Updated Based Image, Dependencies
+
+### fixed
+
+- Limiting the Search rule only if the SMART Scope includes "s"
+
 ## Release 5.2.0 (2026-07)
 
 ### added

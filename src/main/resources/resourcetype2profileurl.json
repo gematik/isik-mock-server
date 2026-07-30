@@ -22,8 +22,7 @@
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKDiagnose"
   ],
   "Encounter": [
-    "https://gematik.de/fhir/isik/StructureDefinition/ISiKKontaktGesundheitseinrichtung",
-    "https://gematik.de/fhir/isik/StructureDefinition/ISiKTerminKontaktMitGesundheitseinrichtung"
+    "https://gematik.de/fhir/isik/StructureDefinition/ISiKKontaktGesundheitseinrichtung"
   ],
   "Patient": [
     "https://gematik.de/fhir/isik/StructureDefinition/ISiKPatient"
