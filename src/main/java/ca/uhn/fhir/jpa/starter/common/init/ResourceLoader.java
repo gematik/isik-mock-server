@@ -68,6 +68,10 @@ public class ResourceLoader {
 	@Value("${example-fhir-resources.directory:example-resources}")
 	private String exampleResourcesDirectory;
 
+	@Getter
+	@Value("${example-fhir-resources.includeSubdirs:true}")
+	boolean includeExampleSubDirectories;
+
 	@Autowired
 	private DaoRegistry daoRegistry;
 
@@ -191,11 +195,17 @@ public class ResourceLoader {
 		try {
 			ClassLoader cl = this.getClass().getClassLoader();
 			ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(cl);
-			Resource[] flatPathResources = resolver.getResources("classpath*:/" + folder + "/*.*");
-			log.info("Importing {} resources from {}", flatPathResources.length, folder);
-			Resource[] nestedPathResources = resolver.getResources("classpath*:/" + folder + "/**/*");
-			log.info("Importing {} nested resources from {}", nestedPathResources.length, folder);
-			importResources(output, flatPathResources);
+			Resource[] resolverResources;
+			if (includeExampleSubDirectories) {
+				resolverResources = resolver.getResources("classpath*:/" + folder + "/**/*");
+				log.info(
+						"Importing {} resources from all the subdirectories of '{}'", resolverResources.length, folder);
+			} else {
+				resolverResources = resolver.getResources("classpath*:/" + folder + "/*.*");
+				log.info("Importing {} resources from directory of '{}'", resolverResources.length, folder);
+			}
+
+			importResources(output, resolverResources);
 
 			log.info("Loaded {} resources from classpath folder `{}`", output.size(), folder);
 			return true;
@@ -219,6 +229,7 @@ public class ResourceLoader {
 				if (!Files.isRegularFile(path)) {
 					return;
 				}
+
 				if (Files.isDirectory(path)) {
 					subfolders.add(path);
 					return;
@@ -230,7 +241,6 @@ public class ResourceLoader {
 				}
 			});
 
-			log.info("Number of subfolders found:  {}", subfolders.size());
 			log.info("Number of files found:  {}", files.size());
 
 			// Iterate over the subfolders for reading files
@@ -282,17 +292,25 @@ public class ResourceLoader {
 	private void importResources(@NonNull List<IBaseResource> output, Resource[] classpathResources)
 			throws IOException {
 		for (Resource resource : classpathResources) {
-			IBaseResource r;
+			String filename = resource.getFilename();
+			if (filename == null) {
+				log.warn("Could not import file");
+				continue;
+			}
+
+			// ignore all not .json or .xml files
+			if (!filename.toLowerCase(Locale.ROOT).endsWith(".json")
+					&& !filename.toLowerCase(Locale.ROOT).endsWith(".xml")) {
+				log.info("Ignoring resource file {}", filename);
+				continue;
+			}
+
 			try (InputStream in = resource.getInputStream();
 					BOMInputStream bomStream =
 							BOMInputStream.builder().setInputStream(in).get()) {
-				String filename = resource.getFilename();
-				if (filename == null) {
-					throw new IllegalStateException("Could not retrieve resource filename");
-				}
-				r = convertToFhirResource(bomStream, filename);
+				IBaseResource r = convertToFhirResource(bomStream, filename);
+				output.add(r);
 			}
-			output.add(r);
 		}
 	}
 }
