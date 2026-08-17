@@ -2,12 +2,30 @@
 
 # Release Notes ISiK Mock Server
 
+## Release 5.3.0 (2026-08)
+
+### added
+
+- SearchParameter `Location-characteristics`
+
+### changed
+
+- Upgraded HAPI FHIR JpaServer to 8.10.0
+- Updated Based Image and Dependencies
+- Removed Maven profile `tracing` for OpenTelemetry, causing exceptions with libraries already provided by HAPI
+
+### fixed
+
+- Load of nested resources in classpath
+- Example Resources for the `Organsspendererkennung` Scenarios
+
 ## Release 5.2.1 (2026-07)
 
 ### changed
 
 - Updated ISiK Plugin to the Specification Version 5.1.3
-- Removed the unused Profile `ISiKTerminKontaktMitGesundheitseinrichtung` (see https://github.com/gematik/spec-ISiK-Basismodul/pull/1263)
+- Removed the unused Profile `ISiKTerminKontaktMitGesundheitseinrichtung`
+  (see https://github.com/gematik/spec-ISiK-Basismodul/pull/1263)
 - Improved example of Keycloak Realm Configuration for the SMART-on-FHIR v2 Flow
 - Updated Based Image, Dependencies
 

@@ -7,3 +7,6 @@ hapi:
 
 plugins:
     enabled: false
+
+example-fhir-resources:
+  includeSubdirs: false

@@ -9,3 +9,6 @@ spring:
       smart:
         fhir-base-url: http://localhost:8080/fhir
         authorization-server-url: http://localhost:9999/realms/test
+
+example-fhir-resources:
+  includeSubdirs: false

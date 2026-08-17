@@ -2,3 +2,5 @@
 ./src/test/java/ca/uhn/fhir/*
 ./src/test/java/some/custom/*
 ./src/main/webapp/*
+./src/main/java/HealthCheck.java
+./src/test/java/HealthCheckTest.java

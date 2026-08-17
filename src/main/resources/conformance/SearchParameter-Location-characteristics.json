@@ -1,0 +1,14 @@
+{
+  "resourceType": "SearchParameter",
+  "id": "Location-characteristics",
+  "url": "https://gematik.de/fhir/isik/SearchParameter/DocumentReference-Facility",
+  "version": "6.0.1",
+  "name": "Characteristics",
+  "status": "active",
+  "description": "This SearchParameter enables finding Location based on their characteristics/type (Location.characteristics).",
+  "code": "characteristics",
+  "base": ["Location"],
+  "type": "token",
+  "expression": "Location.characteristics"
+}
+
