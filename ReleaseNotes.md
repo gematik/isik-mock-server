@@ -2,6 +2,24 @@
 
 # Release Notes ISiK Mock Server
 
+## Release 5.3.2 (2026-09)
+
+### changed
+
+- Updated dependencies
+- Updated base docker image
+
+### fixed
+
+- Search parameter Location
+
+## Release 5.3.1 (2026-09)
+
+### changed
+
+- Updated dependencies
+- Updated base docker image
+
 ## Release 5.3.0 (2026-08)
 
 ### added
