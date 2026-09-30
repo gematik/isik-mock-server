@@ -2,6 +2,12 @@
 
 # Release Notes ISiK Mock Server
 
+## Release 5.3.2 (2026-09)
+
+### fixed
+
+- Expression in `Location-characteristic` SearchParameter
+
 ## Release 5.3.1 (2026-09)
 
 ### changed

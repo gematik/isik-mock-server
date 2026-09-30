@@ -9,5 +9,5 @@
   "code": "characteristic",
   "base": ["Location"],
   "type": "token",
-  "expression": "Location.type"
+  "expression": "Location.physicalType"
 }
