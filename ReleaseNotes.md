@@ -2,6 +2,12 @@
 
 # Release Notes ISiK Mock Server
 
+## Release 5.3.3 (2026-10)
+
+### changed
+
+- Renamed SearchParameter `Location-characteristic` to `Location-form`
+
 ## Release 5.3.2 (2026-09)
 
 ### fixed
