@@ -1,0 +1,13 @@
+{
+  "resourceType": "SearchParameter",
+  "id": "Location-form",
+  "url": "https://gematik.de/fhir/isik/SearchParameter/Location-form",
+  "version": "6.0.0",
+  "name": "form",
+  "status": "active",
+  "description": "This SearchParameter enables finding Location based on their form (Location.physicalType).",
+  "code": "form",
+  "base": ["Location"],
+  "type": "token",
+  "expression": "Location.physicalType"
+}
